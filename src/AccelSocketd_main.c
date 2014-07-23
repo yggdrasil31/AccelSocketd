@@ -1,7 +1,5 @@
-/* Hello World program */
-
-#include<stdio.h>
-#include<>
+#include <stdio.h>
+#include <linux/i2c-dev.h>
 
 main()
 {
