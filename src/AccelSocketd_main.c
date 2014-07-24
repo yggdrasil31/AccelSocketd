@@ -62,7 +62,7 @@
 // INTERN
 //****************************************************************************//
 static volatile int	s_iExitFlag = 0;	// see http://www.linuxprogrammingblog.com/all-about-linux-signals?page=show
-static int s_iAccelFd = -1;
+static int					s_iAccelFd = -1;
 
 //****************************************************************************//
 // REG
@@ -71,8 +71,8 @@ static int s_iAccelFd = -1;
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-void s_vProcess(void);
-void s_vHandleSig();
+static void s_vProcess(void);
+static void s_vHandleSig(int sig);
 
 
 
@@ -165,7 +165,7 @@ int main(int argc, char *argv[])
 	setlogmask(LOG_UPTO(LOG_NOTICE));
 	openlog(ACCELSOCKETD_STRING_NAME, LOG_CONS | LOG_NDELAY | LOG_PERROR | LOG_PID, LOG_USER);
 
-	sprintf (tempStr,"Starting %s %s"),ACCELSOCKETD_STRING_NAME,ACCELSOCKETD_STRING_VERSION);
+	sprintf (tempStr,"Starting %s %s",ACCELSOCKETD_STRING_NAME,ACCELSOCKETD_STRING_VERSION);
 	syslog(LOG_INFO, (const char*)tempStr);
 
 	// Fork the Parent Process
@@ -236,6 +236,7 @@ int main(int argc, char *argv[])
 	}
 
 	// Close the log
+	syslog(LOG_INFO, "Terminated");
 	closelog();
 	
 	// Close I2C-dev
