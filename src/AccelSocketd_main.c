@@ -1,9 +1,9 @@
 #include <stdio.h>
 #include <linux/i2c-dev.h>
 
-main()
+int main(int argc, char *argv[], char *env[])
 {
     printf("Hello World");
 
-
+	return 0;
 }
