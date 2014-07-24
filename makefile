@@ -15,9 +15,9 @@ CFLAGS = -Wall -g -pthread
 
 # define any directories containing header files other than /usr/include
 #
-INCLUDES = -I{LINUXPATH}/include/
-INCLUDES += -I${BUILDROOT_PATH}/output/host/usr/arm-unknown-linux-gnu/sysroot/usr/include/
-
+#INCLUDES = -I{LINUXPATH}/include/
+#INCLUDES += -I${BUILDROOT_PATH}/output/host/usr/arm-unknown-linux-gnu/sysroot/usr/include/
+INCLUDES =
 
 # define library paths in addition to /usr/lib
 #   if I wanted to include libraries not in /usr/lib I'd specify
@@ -61,14 +61,14 @@ all:			$(EXEC)
 					@echo Done compiling $(EXEC)
 
 $(EXEC):	$(OBJS)
-					$(GCC) $(CFLAGS) $(INCLUDES) -o $(EXEC) $(OBJS) $(LFLAGS) $(LIBS)
+					$(CC) $(CFLAGS) $(INCLUDES) -o $(EXEC) $(OBJS) $(LFLAGS) $(LIBS)
 
 # this is a suffix replacement rule for building .o's from .c's
 # it uses automatic variables $<: the name of the prerequisite of
 # the rule(a .c file) and $@: the name of the target of the rule (a .o file)
 # (see the gnu make manual section about automatic variables)
 .c.o:
-					$(GCC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
+					$(CC) $(CFLAGS) $(INCLUDES) -c $<  -o $@
 
 clean:
 					$(RM) *.o *~ $(EXEC)
