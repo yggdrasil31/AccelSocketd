@@ -4,7 +4,7 @@ OBJS = $(SRCS:.c=.o)
 DEBUG = y
 
 TARGET = AccelSocketd
-SRC = ./src/AccelSocketd_main.c
+SRCS = ./src/AccelSocketd_main.c
 OBJS = $(SRCS:.c=.o)
 
 # CC = gcc
