@@ -13,6 +13,10 @@ OBJS = $(SRCS:.c=.o)
 CFLAGS = -Wall
 LDLIBS = -lm
 
+LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
+INC = -I${LINUXPATH}/include/
+INC += -I${BUILDROOT_PATH}/output/host/usr/arm-unknown-linux-gnu/sysroot/usr/include/
+
 ifeq ($(DEBUG),y)
   CFLAGS += -DDEBUG
 endif
@@ -24,7 +28,7 @@ clean:
 	rm -f $(OBJS) $(TARGET)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
 
 $(TARGET): $(OBJS)
 	$(LD) $(LDLIBS) -o $@ $(OBJS)
