@@ -1,10 +1,11 @@
-OBJS = $(SRCS:.c=.o)
+#OBJS = $(SRCS:.c=.o)
 
 # Comment/uncomment the following line to disable/enable debugging
 DEBUG = y
 
 TARGET = AccelSocketd
-SRCS = ./src/AccelSocketd_main.c
+SRCS =	./src/AccelSocketd_main.c \
+				./src/AccelSocketd_server.c
 OBJS = $(SRCS:.c=.o)
 
 # CC = gcc

@@ -37,6 +37,7 @@
 //****************************************************************************// 
 #include "AccelSocketd.h"
 #include "lis3dh.h"
+#include "AccelSocketd_Server.h"
 
 //****************************************************************************//
 // DEFINITION
@@ -224,6 +225,12 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}	
 	
+	// Init the local namespaced socket server
+	if (!bServer_init(argv[1]))
+	{
+		exit(EXIT_FAILURE);
+	}
+	
 	syslog(LOG_INFO, "Successfully started");
 	
 	//----------------
@@ -234,6 +241,9 @@ int main(int argc, char *argv[])
 		s_vProcess();		// Run our Process
 		sleep(60);			// Sleep for 60 seconds
 	}
+	
+	// Terminate UDP server
+	
 
 	// Close the log
 	syslog(LOG_INFO, "Terminated");
