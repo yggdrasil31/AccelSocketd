@@ -14,8 +14,8 @@ CFLAGS = -Wall
 LDLIBS = -lm
 
 LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
-INC = -I${LINUXPATH}/include/
-INC += -I${BUILDROOT_PATH}/output/host/usr/arm-unknown-linux-gnu/sysroot/usr/include/
+#INC = -I${LINUXPATH}/include/
+#INC += -I${BUILDROOT_PATH}/output/host/usr/arm-unknown-linux-gnu/sysroot/usr/include/
 
 ifeq ($(DEBUG),y)
   CFLAGS += -DDEBUG
@@ -28,7 +28,8 @@ clean:
 	rm -f $(OBJS) $(TARGET)
 
 %.o: %.c
-	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
+#	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
+	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(TARGET): $(OBJS)
 	$(LD) $(LDLIBS) -o $@ $(OBJS)

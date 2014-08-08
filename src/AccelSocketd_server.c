@@ -83,7 +83,7 @@ int bServer_init(void* aps8ListenSocketName)
 		// Indicate that this is a server
 		lstName.sun_family = AF_LOCAL;
 		strcpy (lstName.sun_path, ps8ListenSocketName);
-		bind(s32ListenSocket, &lstName, SUN_LEN (&lstName));
+		bind(s32ListenSocket, (struct sockaddr*)&lstName, SUN_LEN (&lstName));
 
 		// Listen for connections
 		listen(s32ListenSocket, SERVER_MAX_CONNECTIONS_IN_BACKLOG);	
@@ -91,7 +91,7 @@ int bServer_init(void* aps8ListenSocketName)
 		lbResult = TRUE;
 	}
 	
-	syslog(LOG_INFO, "bServer_init returns %d while creating local namespace socket %s",lbResult,lps8ListenSocketName);
+	syslog(LOG_INFO, "bServer_init returns %d while creating local namespace socket %s",lbResult,ps8ListenSocketName);
 	
 	return lbResult;
 }
@@ -99,12 +99,10 @@ int bServer_init(void* aps8ListenSocketName)
 
 void vServer_processListen(void)
 {	
-	struct sockaddr_un	lstClientName; 
-	socklen_t						ls32ClientNameLen; 
 	int 								ls32ClientSocket; 
 
 	// Accept a connection
-	ls32ClientSocket = accept (s32ListenSocket, &lstClientName, &ls32ClientNameLen); 
+	ls32ClientSocket = accept (s32ListenSocket, NULL, NULL); 
 
 	// create a new server thread for each accepted connection
 	if (ls32ClientSocket >=0)
@@ -118,13 +116,13 @@ void vServer_processListen(void)
 
 void vServer_terminate()
 {
-	if(s16ListenSocket>=0)
+	if(s32ListenSocket>=0)
 	{
 		/* Remove the socket file.   */ 
 		close (s32ListenSocket); 
 		unlink (ps8ListenSocketName); 
 		
-		s16ListenSocket = -1;
+		s32ListenSocket = -1;
 	}
 }
 

@@ -37,7 +37,7 @@
 //****************************************************************************// 
 #include "AccelSocketd.h"
 #include "lis3dh.h"
-#include "AccelSocketd_Server.h"
+#include "AccelSocketd_server.h"
 
 //****************************************************************************//
 // DEFINITION
@@ -166,8 +166,7 @@ int main(int argc, char *argv[])
 	setlogmask(LOG_UPTO(LOG_NOTICE));
 	openlog(ACCELSOCKETD_STRING_NAME, LOG_CONS | LOG_NDELAY | LOG_PERROR | LOG_PID, LOG_USER);
 
-	sprintf (tempStr,"Starting %s %s",ACCELSOCKETD_STRING_NAME,ACCELSOCKETD_STRING_VERSION);
-	syslog(LOG_INFO, (const char*)tempStr);
+	syslog(LOG_INFO, "Starting %s %s",ACCELSOCKETD_STRING_NAME,ACCELSOCKETD_STRING_VERSION);
 
 	// Fork the Parent Process
 	pid = fork();
