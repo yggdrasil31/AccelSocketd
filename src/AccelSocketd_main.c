@@ -154,7 +154,7 @@ static void s_vProcess(void)
 }
 
 
-int main(int argc, char *argv[])
+int main(int argc, char **argv)
 {
 	pid_t							pid, sid;
 	struct sigaction	stAct;
