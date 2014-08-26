@@ -150,7 +150,7 @@ static void s_vHandleSig (int sig)
 static void s_vProcess(void)
 {
 	syslog (LOG_NOTICE, "... still running ...");
-	
+	vServer_processListen();	
 }
 
 
@@ -241,8 +241,8 @@ int main(int argc, char **argv)
 		sleep(60);			// Sleep for 60 seconds
 	}
 	
-	// Terminate UDP server
-	
+	// Terminate server
+	vServer_terminate();
 
 	// Close the log
 	syslog(LOG_INFO, "Terminated");
