@@ -6,12 +6,14 @@ DEBUG = y
 TARGET = AccelSocketd
 SRCS =	./src/AccelSocketd_main.c \
 				./src/AccelSocketd_server.c
+				
 OBJS = $(SRCS:.c=.o)
 
-# CC = gcc
-# LD = gcc
-CFLAGS = -Wall
-LDLIBS = -lm
+#CC = gcc
+LD = gcc
+CFLAGS = -Wall -pthread
+LDLIBS = -lm -lpthread
+
 
 LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
 #INC = -I${LINUXPATH}/include/
@@ -32,7 +34,7 @@ clean:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(TARGET): $(OBJS)
-	$(LD) $(LDLIBS) -o $@ $(OBJS)
+	$(LD) -o $@ $(OBJS) $(LDLIBS)
 
 .PHONY: all clean
 
