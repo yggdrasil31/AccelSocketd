@@ -31,7 +31,7 @@
 // DEFINITION
 //****************************************************************************// 
 #define SERVER_MAX_FRAME_SIZE								256
-#define SERVER_MAX_CONNECTIONS_IN_BACKLOG		5
+#define SERVER_MAX_CONNECTIONS_IN_BACKLOG		8
 
 //****************************************************************************//
 // MACRO
