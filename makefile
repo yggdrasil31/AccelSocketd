@@ -10,7 +10,7 @@ SRCS =	./src/AccelSocketd_main.c \
 OBJS = $(SRCS:.c=.o)
 
 #CC = gcc
-LD = gcc
+#LD = gcc
 CFLAGS = -Wall -pthread
 LDLIBS = -lm -lpthread
 
@@ -34,7 +34,7 @@ clean:
 	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(TARGET): $(OBJS)
-	$(LD) -o $@ $(OBJS) $(LDLIBS)
+	$(CC) -o $@ $(OBJS) $(LDLIBS)
 
 .PHONY: all clean
 
