@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------//
 // DESC : the namespaced local socket server source code.
 //----------------------------------------------------------------------------//
-// HIST : $Log: AccelSocketd.h,v $
+// HIST : $Log: AccelSocketd.c,v $
 // HIST : Version |   Date   | Author | Description                           
 //        --------------------------------------------------------------------
 //         01.00  | 24/07/14 |  JTou  | Initial version
@@ -41,8 +41,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-#define TRUE	1
-#define FALSE	0
+
 
 //****************************************************************************//
 // MACRO
@@ -63,8 +62,9 @@
 //****************************************************************************//
 // INTERN
 //****************************************************************************//
-int							s32ListenSocket = -1;
-const char* 		ps8ListenSocketName = NULL;
+int									s32ServerSocket = -1;
+struct sockaddr_un	stServerAddress;
+socklen_t						s32AddressLength;
 
 //****************************************************************************//
 // REG
@@ -73,126 +73,118 @@ const char* 		ps8ListenSocketName = NULL;
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-void* vThreadServer_EXE(void* pArg);
 
 
-int bServer_init(void* aps8ListenSocketName)
+int bServer_init(void)
 {	
-	struct sockaddr_un	lstName; 
-	int			 						lbResult = FALSE;
+	int lvs32Result = FALSE;
+	s32AddressLength = sizeof(struct sockaddr_un);
 	
-	ps8ListenSocketName = aps8ListenSocketName;
-	
-	// Create the socket
-	s32ListenSocket = socket(PF_LOCAL, SOCK_STREAM, 0);
-	if (s32ListenSocket>=0)
-	{	
-		// Indicate that this is a server
-		lstName.sun_family = AF_LOCAL;
-		strcpy (lstName.sun_path, ps8ListenSocketName);
-		bind(s32ListenSocket, (struct sockaddr*)&lstName, SUN_LEN (&lstName));
-
-		// Listen for connections
-		listen(s32ListenSocket, SERVER_MAX_CONNECTIONS_IN_BACKLOG);	
+	if((s32ServerSocket = socket(AF_UNIX, SOCK_DGRAM, 0)) >= 0)
+	{
+		memset(&stServerAddress, 0, sizeof(stServerAddress));
+		stServerAddress.sun_family = AF_UNIX;
+		strcpy(stServerAddress.sun_path, SERVER_SOCKET_NAME);
 		
-		lbResult = TRUE;
+		unlink(SERVER_SOCKET_NAME);
+		
+		if(bind(s32ServerSocket, (const struct sockaddr *) &stServerAddress, sizeof(stServerAddress)) < 0)
+		{
+			// error while binding
+			vServer_terminate();
+		}
+		else
+		{
+			lvs32Result = TRUE;
+		}
 	}
 	
-	syslog(LOG_INFO, "bServer_init returns %d while creating local namespace socket %s",lbResult,ps8ListenSocketName);
+	syslog(LOG_INFO, "bServer_init : returns %d while creating local namespace socket %u",lvs32Result,s32ServerSocket);
 	
-	return lbResult;
+	return lvs32Result;
 }
 
-
-void* vThreadServer_EXE(void* pArg)
-{
-		int			ls32ClientSocket = *((int*)pArg); 
-		int			ls32Length = 0; 
-		char*		lps8Text = NULL;
-		int			ls32Result = 0; 
-		
-		syslog(LOG_INFO, "vThreadServer_EXE : server started on client socket %u", ls32ClientSocket);
-		
-		do 
-		{
-			/* First, read the length of the text message from the socket. If 
-			read returns zero, the client closed the connection.  */
-			ls32Result = read (ls32ClientSocket, &ls32Length, sizeof (ls32Length));
-			if (ls32Result > 0) 
-			{
-				/* Allocate a buffer to hold the text.  */ 
-				lps8Text = (char*) malloc (ls32Length); 
-				
-				/* Read the text itself, and print it.  */ 
-				ls32Result = read (ls32ClientSocket, lps8Text, ls32Length);
-				if (ls32Result > 0)
-				{ 
-					printf ("%s\n", lps8Text); 
-					
-					syslog(LOG_INFO, "vThreadServer_EXE : read %u bytes on client socket %u", ls32Result, ls32ClientSocket);
-					/* If the client sent the message "quit," we're all done.  */ 
-					if (strcmp (lps8Text, "quit"))
-					{
-						syslog(LOG_INFO, "vThreadServer_EXE : server closing requested on client socket %u", ls32Result);
-						ls32Result = 0;
-					}
-				}
-				else
-				{
-					syslog(LOG_INFO, "vThreadServer_EXE : error while reading %u bytes on client socket %u", ls32Result, ls32ClientSocket);
-					ls32Result = -1;
-				}
-			}
-			else
-			{
-				syslog(LOG_INFO, "vThreadServer_EXE : error while reading message size on client socket %u", ls32ClientSocket);
-			}			
-			
-			if (lps8Text != NULL)
-			{
-				/* Free the buffer.  */ 
-				free (lps8Text);
-				lps8Text = NULL;
-			}
-		}
-		while (ls32Result > 0);
-		
-		close(ls32ClientSocket);
-		syslog(LOG_INFO, "vThreadServer_EXE : client socket %u closed", ls32ClientSocket);
-		
-		
-		return NULL;
-}
 
 void vServer_processListen(void)
 {	
-	int					ls32ClientSocket; 
-	int					ls32Result;
-	pthread_t		lthreadServer;	
-
-	// Accept a connection
-	ls32ClientSocket = accept (s32ListenSocket, NULL, NULL); 
-
-	// create a new server thread for each accepted connection
-	if (ls32ClientSocket >=0)
+	int									lvs32BytesReceived;
+	int									lvs32BytesSent;
+	char								las8Frame[SERVER_MAX_FRAME_SIZE] = {0};
+	char								las8Reply[SERVER_MAX_FRAME_SIZE] = {0};
+	struct sockaddr_un	stClientAddress;
+		
+	lvs32BytesReceived = recvfrom(s32ServerSocket,
+																las8Frame,
+																SERVER_MAX_FRAME_SIZE,
+																0, 
+																(struct sockaddr *) &(stClientAddress),
+																&s32AddressLength);
+	
+	syslog(LOG_INFO, "vServer_processListen : %u bytes received",lvs32BytesReceived);
+	
+	if (lvs32BytesReceived>=1)
 	{
-		ls32Result = pthread_create ( &lthreadServer,NULL, vThreadServer_EXE, (void*)&ls32ClientSocket);
-		syslog(LOG_INFO, "vServer_processListen : returns %d while creating vThreadServer_EXE", ls32Result);
+		switch (las8Frame[0])
+		{
+			case SERVER_PROTOCOL_SET_DATA_RATE:
+				break;
+				
+			case SERVER_PROTOCOL_GET_DATA_RATE:
+				break;
+				
+			case SERVER_PROTOCOL_SET_SCALE_RANGE:
+				break;
+				
+			case SERVER_PROTOCOL_GET_SCALE_RANGE:
+				break;
+				
+			case SERVER_PROTOCOL_SET_SELFTEST_MODE:
+				break;
+				
+			case SERVER_PROTOCOL_SET_INTERRUPT:
+				break;
+				
+			case SERVER_PROTOCOL_CLEAR_INTERRUPT:
+				break;
+				
+			case SERVER_PROTOCOL_GET_XYZ:
+				break;
+				
+			case SERVER_PROTOCOL_READ_REGISTER:
+				break;
+				
+			case SERVER_PROTOCOL_WRITE_REGISTER:
+				break;
+				
+			default:
+			case SERVER_PROTOCOL_QUIT:
+				break;
+		}
+		
+		// Sending reply to the client
+		lvs32BytesSent = sendto(s32ServerSocket,
+														las8Reply,
+														SERVER_MAX_FRAME_SIZE,
+														0,
+														(struct sockaddr *) &(stClientAddress), 
+														s32AddressLength);	
+		syslog(LOG_INFO, "vServer_processListen : %u bytes sent",lvs32BytesSent);
 	}
-	
-	
+
 }	 
 
 
 void vServer_terminate()
 {
-	if(s32ListenSocket>=0)
+	if(s32ServerSocket>=0)
 	{
-		/* Remove the socket file.   */ 
-		close (s32ListenSocket); 
-		unlink (ps8ListenSocketName); 
+		close (s32ServerSocket); 
+		s32ServerSocket = -1;
 		
-		s32ListenSocket = -1;
+		// Remove the socket file
+		unlink (SERVER_SOCKET_NAME); 
+		
+		syslog(LOG_INFO, "vServer_terminate : local namespace socket %u closed",s32ServerSocket);
 	}
 }
 

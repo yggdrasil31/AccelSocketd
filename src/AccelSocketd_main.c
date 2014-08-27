@@ -10,7 +10,7 @@
 //----------------------------------------------------------------------------//
 // DESC : the AccelSocketd daemon source code.
 //----------------------------------------------------------------------------//
-// HIST : $Log: AccelSocketd.h,v $
+// HIST : $Log: AccelSocketd.c,v $
 // HIST : Version |   Date   | Author | Description                           
 //        --------------------------------------------------------------------
 //         01.00  | 24/07/14 |  JTou  | Initial version
@@ -161,9 +161,9 @@ int main(int argc, char **argv)
 	char							tempStr[48] = {0};
 	
 	// Skeletton for daemon code from http://shahmirj.com/blog/beginners-guide-to-creating-a-daemon-in-linux
-	
+		
 	// Set our Logging Mask and open the Log
-	setlogmask(LOG_UPTO(LOG_NOTICE));
+	//setlogmask(LOG_UPTO(LOG_NOTICE));
 	openlog(ACCELSOCKETD_STRING_NAME, LOG_CONS | LOG_NDELAY | LOG_PERROR | LOG_PID, LOG_USER);
 
 	syslog(LOG_INFO, "Starting %s %s",ACCELSOCKETD_STRING_NAME,ACCELSOCKETD_STRING_VERSION);
@@ -191,6 +191,7 @@ int main(int argc, char **argv)
 		exit(EXIT_FAILURE);
 	}
 
+	
 	// Change Directory
 	// If we cant find the directory we exit with failure.
 	if ((chdir("/")) < 0)
@@ -215,17 +216,19 @@ int main(int argc, char **argv)
 	}
 		
 	// Open I2C-dev
+	/*
 	snprintf(tempStr, 19, "/dev/i2c-%d", ACCELSOCKETD_I2C_ADAPTER);	
 	s_iAccelFd = open(tempStr, O_RDWR);
 	if (s_iAccelFd < 0)
 	{
-		/* ERROR HANDLING; you can check errno to see what went wrong */
+		// ERROR HANDLING; you can check errno to see what went wrong
 		syslog(LOG_INFO, "Can't open I2C device %s",tempStr);
 		exit(EXIT_FAILURE);
 	}	
+	*/
 	
 	// Init the local namespaced socket server
-	if (!bServer_init(argv[1]))
+	if (!bServer_init())
 	{
 		exit(EXIT_FAILURE);
 	}

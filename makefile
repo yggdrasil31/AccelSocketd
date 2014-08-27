@@ -3,19 +3,23 @@
 # Comment/uncomment the following line to disable/enable debugging
 DEBUG = y
 
-TARGET = AccelSocketd
-SRCS =	./src/AccelSocketd_main.c \
-				./src/AccelSocketd_server.c
-				
-OBJS = $(SRCS:.c=.o)
+# Targets definition
+DAEMON_TARGET = AccelSocketd
+DAEMON_SRCS =	./src/AccelSocketd_main.c \
+							./src/AccelSocketd_server.c
+DAEMON_OBJS = $(DAEMON_SRCS:.c=.o)
 
-#CC = gcc
-#LD = gcc
+CLIENT_TARGET = AccelSocketClient
+CLIENT_SRCS =	./src/AccelSocket_main.c \
+							./src/libAccelSocket.c
+CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
+
+# FLAGS
 CFLAGS = -Wall -pthread
 LDLIBS = -lm -lpthread
 
 
-LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
+#LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
 #INC = -I${LINUXPATH}/include/
 #INC += -I${BUILDROOT_PATH}/output/host/usr/arm-unknown-linux-gnu/sysroot/usr/include/
 
@@ -24,21 +28,26 @@ ifeq ($(DEBUG),y)
 endif
 
 
-all: $(TARGET)
+all: $(DAEMON_TARGET) $(CLIENT_TARGET)
 
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(DAEMON_OBJS) $(DAEMON_TARGET)
+	rm -f $(CLIENT_OBJS) $(CLIENT_TARGET)
 
 %.o: %.c
 #	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
 	$(CC) $(CFLAGS) -c -o $@ $<
 
-$(TARGET): $(OBJS)
-	$(CC) -o $@ $(OBJS) $(LDLIBS)
+$(DAEMON_TARGET): $(DAEMON_OBJS)
+	$(CC) -o $@ $(DAEMON_OBJS) $(LDLIBS)
+	
+$(CLIENT_TARGET): $(CLIENT_OBJS)
+	$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS)
 
 .PHONY: all clean
 
 install:
-	cp $(TARGET) $(DESTDIR)/bin/AccelSocketd
+	cp $(DAEMON_TARGET) $(DESTDIR)/bin/AccelSocketd
+	cp $(CLIENT_TARGET) $(DESTDIR)/bin/AccelSocketClient
 
 # DO NOT DELETE THIS LINE -- make depend needs it

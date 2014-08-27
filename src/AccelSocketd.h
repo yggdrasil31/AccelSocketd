@@ -33,16 +33,14 @@
 //****************************************************************************// 
 
 // AccelSocketd version number
-#define ACCELSOCKETD_STRING_NAME			"AccelSocketd"
-#define ACCELSOCKETD_STRING_VERSION		"V01.00.00"
+#define ACCELSOCKETD_STRING_NAME				"AccelSocketd"
+#define ACCELSOCKETD_STRING_VERSION			"V01.00.00"
+
 
 // I2C setup
-#define ACCELSOCKETD_I2C_ADAPTER			((char)0x00)
-#define ACCELSOCKETD_I2C_ADDRESS			((char)0x00)
+#define ACCELSOCKETD_I2C_ADAPTER				((char)0x00)
+#define ACCELSOCKETD_I2C_ADDRESS				((char)0x00)
 
-// UDP setup
-#define ACCELSOCKETD_UDP_LISTEN_PORT	1337
-#define ACCELSOCKETD_UDP_ADDRESS			"127.0.0.1"
 
 
 //****************************************************************************//

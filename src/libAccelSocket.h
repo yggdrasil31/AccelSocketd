@@ -6,11 +6,11 @@
 //        --------------------------------------------------------------------
 //        AccelSocketd : Module Name
 //##########################7#################################################//
-// FILE : AccelSocketd_Server.h (SOURCE)
+// FILE : libAccelSocket.h (HEADER)
 //----------------------------------------------------------------------------//
-// DESC : the namespaced local socket server header.
+// DESC : the lib that connects application to the AccelSocket Daemon.
 //----------------------------------------------------------------------------//
-// HIST : $Log: AccelSocketd_server.h,v $
+// HIST : $Log: libAccelSocket.h,v $
 // HIST : Version |   Date   | Author | Description                           
 //        --------------------------------------------------------------------
 //         01.00  | 24/07/14 |  JTou  | Initial version
@@ -30,24 +30,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-#define TRUE	1
-#define FALSE	0
 
-#define SERVER_SOCKET_NAME									"./AccelSocketServer"		// Unix Domain Socket name
-#define SERVER_MAX_FRAME_SIZE								256
-#define SERVER_MAX_CONNECTIONS_IN_BACKLOG		8
-
-#define SERVER_PROTOCOL_SET_DATA_RATE				0
-#define SERVER_PROTOCOL_GET_DATA_RATE				1
-#define SERVER_PROTOCOL_SET_SCALE_RANGE			2
-#define SERVER_PROTOCOL_GET_SCALE_RANGE			3
-#define SERVER_PROTOCOL_SET_SELFTEST_MODE		4
-#define SERVER_PROTOCOL_SET_INTERRUPT				5
-#define SERVER_PROTOCOL_CLEAR_INTERRUPT			6
-#define SERVER_PROTOCOL_GET_XYZ							7
-#define SERVER_PROTOCOL_READ_REGISTER				8
-#define SERVER_PROTOCOL_WRITE_REGISTER			9
-#define SERVER_PROTOCOL_QUIT								10
 
 //****************************************************************************//
 // MACRO
@@ -77,9 +60,8 @@
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-int bServer_init(void);
-void vServer_processListen(void);
-void vServer_terminate();
+int libAccelSocket_bOpen(void);
+void libAccelSocket_vClose(void);
 
 
 
