@@ -16,7 +16,10 @@
 //         01.00  | 24/07/14 |  JTou  | Initial version
 //                |          |        |
 //############################################################################//
-  
+
+#ifndef __ACCELSOCKETD_SERVER_H__
+#define __ACCELSOCKETD_SERVER_H__
+
 //****************************************************************************//
 // INCLIB
 //****************************************************************************//
@@ -25,17 +28,13 @@
 //****************************************************************************//
 // INCUSER
 //****************************************************************************// 
-
+#include "libAccelSocket.h"
 
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-#define TRUE	1
-#define FALSE	0
 
-#define SERVER_SOCKET_NAME									"./AccelSocketServer"		// Unix Domain Socket name
-#define SERVER_MAX_FRAME_SIZE								256
-#define SERVER_MAX_CONNECTIONS_IN_BACKLOG		8
+#define SERVER_SOCKET_NAME									"/tmp/AccelSocketServer"		// Unix Domain Socket name
 
 #define SERVER_PROTOCOL_SET_DATA_RATE				0
 #define SERVER_PROTOCOL_GET_DATA_RATE				1
@@ -47,7 +46,6 @@
 #define SERVER_PROTOCOL_GET_XYZ							7
 #define SERVER_PROTOCOL_READ_REGISTER				8
 #define SERVER_PROTOCOL_WRITE_REGISTER			9
-#define SERVER_PROTOCOL_QUIT								10
 
 //****************************************************************************//
 // MACRO
@@ -77,9 +75,12 @@
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-int bServer_init(void);
+elibAccelSocketBool bServer_init(void);
 void vServer_processListen(void);
 void vServer_terminate();
+
+#endif
+
 
 
 

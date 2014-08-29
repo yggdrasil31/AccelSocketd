@@ -16,11 +16,15 @@
 //         01.00  | 24/07/14 |  JTou  | Initial version
 //                |          |        |
 //############################################################################//
-  
+
+#ifndef __LIBACCELSOCKET_H__
+#define __LIBACCELSOCKET_H__
+
 //****************************************************************************//
 // INCLIB
 //****************************************************************************//
-
+#include <stdint.h>
+#include <sys/types.h>
 
 //****************************************************************************//
 // INCUSER
@@ -30,7 +34,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-
+#define LIBACCELSOCKET_MAX_FRAME_SIZE								256
 
 //****************************************************************************//
 // MACRO
@@ -39,7 +43,8 @@
 //****************************************************************************//
 // TYPEDEF
 //****************************************************************************//
-
+typedef enum {FALSE = 0, TRUE = 1} elibAccelSocketBool;
+typedef char TYPE_LibAccelSocketFrame[LIBACCELSOCKET_MAX_FRAME_SIZE];
 
 //****************************************************************************//
 // CONST
@@ -60,8 +65,14 @@
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-int libAccelSocket_bOpen(void);
-void libAccelSocket_vClose(void);
+elibAccelSocketBool	libAccelSocket_bOpen(void);
+void								libAccelSocket_vClose(void);
+
+elibAccelSocketBool	libAccelSocket_bSetDataRate(TYPE_LibAccelSocketFrame ats8Reply,uint32_t* apu32Size);
+elibAccelSocketBool	libAccelSocket_bGetDataRate(TYPE_LibAccelSocketFrame ats8Reply,uint32_t* apu32Size);
+
+#endif
+
 
 
 

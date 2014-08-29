@@ -36,7 +36,9 @@
 //****************************************************************************//
 // INCUSER
 //****************************************************************************// 
+#include "libAccelSocket.h"
 #include "AccelSocketd_server.h"
+
 
 //****************************************************************************//
 // DEFINITION
@@ -75,9 +77,9 @@ socklen_t						s32AddressLength;
 //****************************************************************************//
 
 
-int bServer_init(void)
+elibAccelSocketBool bServer_init(void)
 {	
-	int lvs32Result = FALSE;
+	elibAccelSocketBool lvbResult = FALSE;
 	s32AddressLength = sizeof(struct sockaddr_un);
 	
 	if((s32ServerSocket = socket(AF_UNIX, SOCK_DGRAM, 0)) >= 0)
@@ -95,27 +97,27 @@ int bServer_init(void)
 		}
 		else
 		{
-			lvs32Result = TRUE;
+			lvbResult = TRUE;
 		}
 	}
 	
-	syslog(LOG_INFO, "bServer_init : returns %d while creating local namespace socket %u",lvs32Result,s32ServerSocket);
+	syslog(LOG_INFO, "bServer_init : returns %d while creating local namespace socket %u",lvbResult,s32ServerSocket);
 	
-	return lvs32Result;
+	return lvbResult;
 }
 
 
 void vServer_processListen(void)
 {	
-	int									lvs32BytesReceived;
-	int									lvs32BytesSent;
-	char								las8Frame[SERVER_MAX_FRAME_SIZE] = {0};
-	char								las8Reply[SERVER_MAX_FRAME_SIZE] = {0};
-	struct sockaddr_un	stClientAddress;
+	int												lvs32BytesReceived;
+	int												lvs32BytesSent;
+	TYPE_LibAccelSocketFrame	las8Frame = {0};
+	TYPE_LibAccelSocketFrame	las8Reply = {0};
+	struct sockaddr_un				stClientAddress;
 		
 	lvs32BytesReceived = recvfrom(s32ServerSocket,
 																las8Frame,
-																SERVER_MAX_FRAME_SIZE,
+																LIBACCELSOCKET_MAX_FRAME_SIZE,
 																0, 
 																(struct sockaddr *) &(stClientAddress),
 																&s32AddressLength);
@@ -127,44 +129,54 @@ void vServer_processListen(void)
 		switch (las8Frame[0])
 		{
 			case SERVER_PROTOCOL_SET_DATA_RATE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_DATA_RATE received");
 				break;
 				
 			case SERVER_PROTOCOL_GET_DATA_RATE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_GET_DATA_RATE received");
 				break;
 				
 			case SERVER_PROTOCOL_SET_SCALE_RANGE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_SCALE_RANGE received");
 				break;
 				
 			case SERVER_PROTOCOL_GET_SCALE_RANGE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_GET_SCALE_RANGE received");
 				break;
 				
 			case SERVER_PROTOCOL_SET_SELFTEST_MODE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_SELFTEST_MODE received");
 				break;
 				
 			case SERVER_PROTOCOL_SET_INTERRUPT:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_INTERRUPT received");
 				break;
 				
 			case SERVER_PROTOCOL_CLEAR_INTERRUPT:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_CLEAR_INTERRUPT received");
 				break;
 				
 			case SERVER_PROTOCOL_GET_XYZ:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_GET_XYZ received");
 				break;
 				
 			case SERVER_PROTOCOL_READ_REGISTER:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_READ_REGISTER received");
 				break;
 				
 			case SERVER_PROTOCOL_WRITE_REGISTER:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_WRITE_REGISTER received");
 				break;
 				
 			default:
-			case SERVER_PROTOCOL_QUIT:
+				syslog(LOG_INFO, "vServer_processListen : unsupported request received");
 				break;
 		}
 		
 		// Sending reply to the client
 		lvs32BytesSent = sendto(s32ServerSocket,
 														las8Reply,
-														SERVER_MAX_FRAME_SIZE,
+														LIBACCELSOCKET_MAX_FRAME_SIZE,
 														0,
 														(struct sockaddr *) &(stClientAddress), 
 														s32AddressLength);	
@@ -178,13 +190,16 @@ void vServer_terminate()
 {
 	if(s32ServerSocket>=0)
 	{
+		syslog(LOG_INFO, "vServer_terminate : closing local namespace socket %u",s32ServerSocket);
 		close (s32ServerSocket); 
 		s32ServerSocket = -1;
 		
 		// Remove the socket file
-		unlink (SERVER_SOCKET_NAME); 
-		
-		syslog(LOG_INFO, "vServer_terminate : local namespace socket %u closed",s32ServerSocket);
+		unlink (SERVER_SOCKET_NAME); 		
+	}
+	else
+	{		
+		syslog(LOG_INFO, "vServer_terminate : local namespace socket already closed\n");
 	}
 }
 

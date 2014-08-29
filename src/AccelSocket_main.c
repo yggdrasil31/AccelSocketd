@@ -74,37 +74,44 @@
 
 int main(int argc, char **argv)
 {	
-	int lu32Choice;
-	int	ls32Result;
-	int ls32Quit = FALSE;
 	
 	
-	ls32Result = libAccelSocket_bOpen();
-	if (ls32Result != FALSE)
+	TYPE_LibAccelSocketFrame	ltReply = {0};
+	uint32_t									ls32Quit = FALSE;
+	uint32_t									lu32Choice;
+	uint32_t									lu32Size;
+	elibAccelSocketBool				lbResult;	
+	
+	
+	lbResult = libAccelSocket_bOpen();
+	if (lbResult == TRUE)
 	{	
 		do
 		{
-			printf ("AccelSocket Client :\r\n ");
-			printf (" 1- SET_DATA_RATE\n");
-			printf (" 2- GET_DATA_RATE\n");
-			printf (" 3- SET_SCALE_RANGE\n");
-			printf (" 4- GET_SCALE_RANGE\n");
-			printf (" 5- SET_SELFTEST_MODE\n");
-			printf (" 6- SET_INTERRUPT\n");
-			printf (" 7- CLEAR_INTERRUPT\n");
-			printf (" 8- GET_XYZ\n");
-			printf (" 9- READ_REGISTER\n");
-			printf ("10- WRITE_REGISTER\n");
-			printf ("11- QUIT\n");
+			printf ("AccelSocket Client :\r\n");
+			printf (" 0- SET_DATA_RATE\n");
+			printf (" 1- GET_DATA_RATE\n");
+			printf (" 2- SET_SCALE_RANGE\n");
+			printf (" 3- GET_SCALE_RANGE\n");
+			printf (" 4- SET_SELFTEST_MODE\n");
+			printf (" 5- SET_INTERRUPT\n");
+			printf (" 6- CLEAR_INTERRUPT\n");
+			printf (" 7- GET_XYZ\n");
+			printf (" 8- READ_REGISTER\n");
+			printf (" 9- WRITE_REGISTER\n");
+			printf ("10- QUIT\n");
 			
-			scanf("your choice : %d", &lu32Choice);
+			scanf("%d", &lu32Choice);
 			
-			switch (lu32Choice-1)
+			printf ("executing %d\n",lu32Choice);
+			switch (lu32Choice)
 			{
 				case SERVER_PROTOCOL_SET_DATA_RATE:
+					libAccelSocket_bSetDataRate(ltReply,&lu32Size);
 					break;
 					
 				case SERVER_PROTOCOL_GET_DATA_RATE:
+					libAccelSocket_bGetDataRate(ltReply,&lu32Size);
 					break;
 					
 				case SERVER_PROTOCOL_SET_SCALE_RANGE:
@@ -132,7 +139,6 @@ int main(int argc, char **argv)
 					break;
 					
 				default:
-				case SERVER_PROTOCOL_QUIT:
 					ls32Quit = TRUE;
 					break;
 			}

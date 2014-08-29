@@ -15,8 +15,9 @@ CLIENT_SRCS =	./src/AccelSocket_main.c \
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 
 # FLAGS
-CFLAGS = -Wall -pthread
-LDLIBS = -lm -lpthread
+CFLAGS = -Wall
+#LDLIBS = -lm -lpthread
+LDLIBS = 
 
 
 #LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
