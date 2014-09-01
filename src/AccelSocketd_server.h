@@ -34,7 +34,7 @@
 // DEFINITION
 //****************************************************************************// 
 
-#define SERVER_SOCKET_NAME									"/tmp/AccelSocketServer"		// Unix Domain Socket name
+#define SERVER_SOCKET_NAME									"/tmp/SocketServer"		// Unix Domain Socket name
 
 #define SERVER_PROTOCOL_SET_DATA_RATE				0
 #define SERVER_PROTOCOL_GET_DATA_RATE				1

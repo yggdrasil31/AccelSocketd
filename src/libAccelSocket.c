@@ -40,7 +40,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-#define CLIENT_SOCKET_NAME "/tmp/AccelSocketClient"
+#define CLIENT_SOCKET_NAME "/tmp/SocketClient"
 
 //****************************************************************************//
 // MACRO
@@ -176,7 +176,7 @@ elibAccelSocketBool libAccelSocket_bGetDataRate(TYPE_LibAccelSocketFrame ats8Rep
 
 elibAccelSocketBool libAccelSocket_bComServer(TYPE_LibAccelSocketFrame ats8Request, TYPE_LibAccelSocketFrame ats8Reply,uint32_t* apu32Size)
 {
-	socklen_t									lvs32AddressLength;
+	//socklen_t									lvs32AddressLength;
 	int32_t										lvs32BytesSent = 0;
 	elibAccelSocketBool				lvbResult = FALSE;
 	
@@ -196,9 +196,9 @@ elibAccelSocketBool libAccelSocket_bComServer(TYPE_LibAccelSocketFrame ats8Reque
 
 		if (lvs32BytesSent>0)
 		{		
-			lvs32AddressLength = sizeof(struct sockaddr_un);
-			*apu32Size = recvfrom(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE, 0, (struct sockaddr *) &(stServerAddress), &lvs32AddressLength);
-			//*apu32Size = read(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE);
+			//lvs32AddressLength = sizeof(struct sockaddr_un);
+			//*apu32Size = recvfrom(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE, 0, (struct sockaddr *) &(stServerAddress), &lvs32AddressLength);
+			*apu32Size = read(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE);
 			lvbResult = TRUE;
 			
 #ifdef DEBUG
