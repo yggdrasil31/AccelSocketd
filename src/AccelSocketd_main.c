@@ -20,16 +20,14 @@
 //****************************************************************************//
 // INCLIB
 //****************************************************************************//
-#include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <fcntl.h>
-#include <errno.h>
 #include <unistd.h>
 #include <signal.h>
 #include <syslog.h>
 #include <string.h>
+#include <sched.h>
 #include <linux/i2c-dev.h>
 
 //****************************************************************************//
@@ -241,7 +239,7 @@ int main(int argc, char **argv)
 	while(!s_iExitFlag)
 	{
 		s_vProcess();		// Run our Process
-		sleep(60);			// Sleep for 60 seconds
+		sched_yield();
 	}
 	
 	// Terminate server

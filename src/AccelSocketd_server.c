@@ -22,11 +22,9 @@
 //****************************************************************************//
 #include <stdio.h>
 #include <stdlib.h>
-#include <pthread.h>
 #include <unistd.h>
-#include <errno.h>
-#include <fcntl.h>
 #include <string.h>
+#include <sched.h>
 #include <sys/types.h>
 #include <sys/socket.h> 
 #include <sys/un.h> 
@@ -122,9 +120,10 @@ void vServer_processListen(void)
 																(struct sockaddr *) &(stClientAddress),
 																&s32AddressLength);
 	
-	syslog(LOG_INFO, "vServer_processListen : %u bytes received",lvs32BytesReceived);
+	syslog(LOG_INFO, "vServer_processListen : %d bytes received",lvs32BytesReceived);
 	
-	if (lvs32BytesReceived>=1)
+	if (	(lvs32BytesReceived>=1)
+			&&(lvs32BytesReceived<=LIBACCELSOCKET_MAX_FRAME_SIZE)	)
 	{
 		switch (las8Frame[0])
 		{
@@ -179,7 +178,7 @@ void vServer_processListen(void)
 														LIBACCELSOCKET_MAX_FRAME_SIZE,
 														0,
 														(struct sockaddr *) &(stClientAddress), 
-														s32AddressLength);	
+														s32AddressLength);
 		syslog(LOG_INFO, "vServer_processListen : %u bytes sent",lvs32BytesSent);
 	}
 
