@@ -36,16 +36,25 @@
 
 #define SERVER_SOCKET_NAME									"/tmp/myAccelSocketServer"		// Unix Domain Socket name
 
-#define SERVER_PROTOCOL_SET_DATA_RATE				0
-#define SERVER_PROTOCOL_GET_DATA_RATE				1
-#define SERVER_PROTOCOL_SET_SCALE_RANGE			2
-#define SERVER_PROTOCOL_GET_SCALE_RANGE			3
-#define SERVER_PROTOCOL_SET_SELFTEST_MODE		4
-#define SERVER_PROTOCOL_SET_INTERRUPT				5
-#define SERVER_PROTOCOL_CLEAR_INTERRUPT			6
-#define SERVER_PROTOCOL_GET_XYZ							7
-#define SERVER_PROTOCOL_READ_REGISTER				8
-#define SERVER_PROTOCOL_WRITE_REGISTER			9
+#define SERVER_OFFSET_CMD										0
+#define SERVER_OFFSET_PARAM1								1
+#define SERVER_OFFSET_PARAM2								2
+
+
+#define SERVER_CMD_SET_DATA_RATE				0
+#define SERVER_CMD_GET_DATA_RATE				1
+#define SERVER_CMD_SET_SCALE_RANGE			2
+#define SERVER_CMD_GET_SCALE_RANGE			3
+#define SERVER_CMD_SET_SELFTEST_MODE		4
+/*
+#define SERVER_CMD_SET_INTERRUPT				5
+#define SERVER_CMD_CLEAR_INTERRUPT			6
+*/
+#define SERVER_CMD_GET_XYZ							7
+#define SERVER_CMD_READ_REGISTER				8
+#define SERVER_CMD_WRITE_REGISTER				9
+#define SERVER_CMD_UNSUPPORTED					10
+#define SERVER_CMD_ERROR								11
 
 //****************************************************************************//
 // MACRO

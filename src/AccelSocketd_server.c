@@ -6,11 +6,11 @@
 //        --------------------------------------------------------------------
 //        AccelSocketd : Module Name
 //##########################7#################################################//
-// FILE : AccelSocketd_UdpServer.c (SOURCE)
+// FILE : AccelSocketd_server.c (SOURCE)
 //----------------------------------------------------------------------------//
 // DESC : the namespaced local socket server source code.
 //----------------------------------------------------------------------------//
-// HIST : $Log: AccelSocketd.c,v $
+// HIST : $Log: AccelSocketd_server.c,v $
 // HIST : Version |   Date   | Author | Description                           
 //        --------------------------------------------------------------------
 //         01.00  | 24/07/14 |  JTou  | Initial version
@@ -36,12 +36,11 @@
 //****************************************************************************// 
 #include "libAccelSocket.h"
 #include "AccelSocketd_server.h"
-
+#include "AccelSocketd_i2c.h"
 
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-
 
 //****************************************************************************//
 // MACRO
@@ -109,15 +108,17 @@ void vServer_processListen(void)
 {	
 	int												lvs32BytesReceived;
 	int												lvs32BytesSent;
-	TYPE_LibAccelSocketFrame	las8Frame = {0};
-	TYPE_LibAccelSocketFrame	las8Reply = {0};
-	struct sockaddr_un				stClientAddress;
+	TstLibAccelSocketFrame		lts8Request = {0};
+	TstLibAccelSocketFrame		lts8Reply = {0};
+	struct sockaddr_un				lstClientAddress;
+	uint8_t										lvu8Data;
+	TstAccel_XYZ							lstAccel = {0};
 		
 	lvs32BytesReceived = recvfrom(s32ServerSocket,
-																las8Frame,
+																lts8Request,
 																LIBACCELSOCKET_MAX_FRAME_SIZE,
 																0, 
-																(struct sockaddr *) &(stClientAddress),
+																(struct sockaddr *) &(lstClientAddress),
 																&s32AddressLength);
 	
 	syslog(LOG_INFO, "vServer_processListen : %d bytes received",lvs32BytesReceived);
@@ -125,59 +126,111 @@ void vServer_processListen(void)
 	if (	(lvs32BytesReceived>=1)
 			&&(lvs32BytesReceived<=LIBACCELSOCKET_MAX_FRAME_SIZE)	)
 	{
-		switch (las8Frame[0])
+		lts8Reply[SERVER_OFFSET_CMD] = lts8Request[SERVER_OFFSET_CMD];
+		switch (lts8Request[SERVER_OFFSET_CMD])
 		{
-			case SERVER_PROTOCOL_SET_DATA_RATE:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_DATA_RATE received");
+			case SERVER_CMD_SET_DATA_RATE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_SET_DATA_RATE received");
+				if (I2c_bSetDataRate(lts8Request[SERVER_OFFSET_PARAM1])== FALSE)
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}				 
 				break;
 				
-			case SERVER_PROTOCOL_GET_DATA_RATE:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_GET_DATA_RATE received");
+			case SERVER_CMD_GET_DATA_RATE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_GET_DATA_RATE received");
+				if (I2c_bGetDataRate(&lvu8Data))
+				{
+					lts8Reply[SERVER_OFFSET_PARAM1] = lvu8Data;
+				}
+				else
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}
 				break;
 				
-			case SERVER_PROTOCOL_SET_SCALE_RANGE:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_SCALE_RANGE received");
+			case SERVER_CMD_SET_SCALE_RANGE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_SET_SCALE_RANGE received");
+				if (I2c_bSetScaleRange(lts8Request[SERVER_OFFSET_PARAM1]) == FALSE)
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}
 				break;
 				
-			case SERVER_PROTOCOL_GET_SCALE_RANGE:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_GET_SCALE_RANGE received");
+			case SERVER_CMD_GET_SCALE_RANGE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_GET_SCALE_RANGE received");
+				if (I2c_bGetScaleRange(&lvu8Data))
+				{
+					lts8Reply[SERVER_OFFSET_PARAM1] = lvu8Data;
+				}
+				else
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}
 				break;
 				
-			case SERVER_PROTOCOL_SET_SELFTEST_MODE:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_SELFTEST_MODE received");
+			case SERVER_CMD_SET_SELFTEST_MODE:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_SET_SELFTEST_MODE received");				
+				if (I2c_bSetSelfTestMode(lts8Request[SERVER_OFFSET_PARAM1]) == FALSE)
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}
+				break;
+			
+			/*
+			case SERVER_CMD_SET_INTERRUPT:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_SET_INTERRUPT received");
 				break;
 				
-			case SERVER_PROTOCOL_SET_INTERRUPT:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_SET_INTERRUPT received");
+			case SERVER_CMD_CLEAR_INTERRUPT:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_CLEAR_INTERRUPT received");
+				break;
+			*/
+				
+			case SERVER_CMD_GET_XYZ:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_GET_XYZ received");
+				if (I2c_bGetXYZ(&lstAccel))
+				{
+					memcpy(&lts8Reply[SERVER_OFFSET_PARAM1],&lstAccel,sizeof(TstAccel_XYZ));					
+				}
+				else
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}				
 				break;
 				
-			case SERVER_PROTOCOL_CLEAR_INTERRUPT:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_CLEAR_INTERRUPT received");
+			case SERVER_CMD_READ_REGISTER:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_READ_REGISTER received");
+				if(I2c_bReadRegister(lts8Request[SERVER_OFFSET_PARAM1], &lvu8Data))
+				{
+					lts8Reply[SERVER_OFFSET_PARAM1] = lvu8Data;
+				}
+				else
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}
 				break;
 				
-			case SERVER_PROTOCOL_GET_XYZ:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_GET_XYZ received");
-				break;
-				
-			case SERVER_PROTOCOL_READ_REGISTER:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_READ_REGISTER received");
-				break;
-				
-			case SERVER_PROTOCOL_WRITE_REGISTER:
-				syslog(LOG_INFO, "vServer_processListen : SERVER_PROTOCOL_WRITE_REGISTER received");
+			case SERVER_CMD_WRITE_REGISTER:
+				syslog(LOG_INFO, "vServer_processListen : SERVER_CMD_WRITE_REGISTER received");
+				if(I2c_bWriteRegister(lts8Request[SERVER_OFFSET_PARAM1], lts8Request[SERVER_OFFSET_PARAM2]) == FALSE)
+				{
+					lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_ERROR;
+				}
 				break;
 				
 			default:
 				syslog(LOG_INFO, "vServer_processListen : unsupported request received");
+				lts8Reply[SERVER_OFFSET_CMD] = SERVER_CMD_UNSUPPORTED;
 				break;
 		}
 		
 		// Sending reply to the client
 		lvs32BytesSent = sendto(s32ServerSocket,
-														las8Reply,
+														lts8Reply,
 														LIBACCELSOCKET_MAX_FRAME_SIZE,
 														0,
-														(struct sockaddr *) &(stClientAddress), 
+														(struct sockaddr *) &(lstClientAddress), 
 														s32AddressLength);
 		syslog(LOG_INFO, "vServer_processListen : %u bytes sent",lvs32BytesSent);
 	}

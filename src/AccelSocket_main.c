@@ -35,6 +35,7 @@
 //****************************************************************************// 
 #include "libAccelSocket.h"
 #include "AccelSocketd_server.h"
+#include "lis3dh.h"
 
 
 //****************************************************************************//
@@ -73,14 +74,13 @@
 
 
 int main(int argc, char **argv)
-{	
-	
-	
-	TYPE_LibAccelSocketFrame	ltReply = {0};
+{		
 	uint32_t									ls32Quit = FALSE;
 	uint32_t									lu32Choice;
-	uint32_t									lu32Size;
-	elibAccelSocketBool				lbResult;	
+	elibAccelSocketBool				lbResult;
+	uint8_t										lvu8Value;
+	TstAccel_XYZ							lstAccel;
+	uint8_t										lvu8Register;
 	
 	
 	lbResult = libAccelSocket_bOpen();
@@ -106,36 +106,48 @@ int main(int argc, char **argv)
 			printf ("executing %d\n",lu32Choice);
 			switch (lu32Choice)
 			{
-				case SERVER_PROTOCOL_SET_DATA_RATE:
-					libAccelSocket_bSetDataRate(ltReply,&lu32Size);
+				case SERVER_CMD_SET_DATA_RATE:
+					libAccelSocket_bSetDataRate(9);
 					break;
 					
-				case SERVER_PROTOCOL_GET_DATA_RATE:
-					libAccelSocket_bGetDataRate(ltReply,&lu32Size);
+				case SERVER_CMD_GET_DATA_RATE:
+					libAccelSocket_bGetDataRate(&lvu8Value);
 					break;
 					
-				case SERVER_PROTOCOL_SET_SCALE_RANGE:
+				case SERVER_CMD_SET_SCALE_RANGE:
+					libAccelSocket_bSetScaleRange(1);
 					break;
 					
-				case SERVER_PROTOCOL_GET_SCALE_RANGE:
+				case SERVER_CMD_GET_SCALE_RANGE:
+					libAccelSocket_bGetScaleRange(&lvu8Value);
 					break;
 					
-				case SERVER_PROTOCOL_SET_SELFTEST_MODE:
+				case SERVER_CMD_SET_SELFTEST_MODE:
+					libAccelSocket_bSetSelftestMode(1);
+					break;
+				
+				/*	
+				case SERVER_CMD_SET_INTERRUPT:
+					libAccelSocket_bSetInterrupt(ltReply,&lu32Size);
 					break;
 					
-				case SERVER_PROTOCOL_SET_INTERRUPT:
+				case SERVER_CMD_CLEAR_INTERRUPT:
+					libAccelSocket_bClearInterrupt(ltReply,&lu32Size);
+					break;
+				*/
+					
+				case SERVER_CMD_GET_XYZ:
+					libAccelSocket_bGetXYZ(&lstAccel);
 					break;
 					
-				case SERVER_PROTOCOL_CLEAR_INTERRUPT:
+				case SERVER_CMD_READ_REGISTER:
+					lvu8Register = LIS3DH_WHO_AM_I;
+					libAccelSocket_bReadRegister(lvu8Register, &lvu8Value);
 					break;
 					
-				case SERVER_PROTOCOL_GET_XYZ:
-					break;
-					
-				case SERVER_PROTOCOL_READ_REGISTER:
-					break;
-					
-				case SERVER_PROTOCOL_WRITE_REGISTER:
+				case SERVER_CMD_WRITE_REGISTER:
+					lvu8Register = LIS3DH_CTRL_REG3;
+					libAccelSocket_bWriteRegister(lvu8Register, 0);
 					break;
 					
 				default:

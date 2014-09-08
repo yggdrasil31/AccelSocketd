@@ -6,25 +6,24 @@
 //        --------------------------------------------------------------------
 //        AccelSocketd : Module Name
 //##########################7#################################################//
-// FILE : libAccelSocket.h (HEADER)
+// FILE : AccelSocketd_i2c.h (SOURCE)
 //----------------------------------------------------------------------------//
-// DESC : the lib that connects application to the AccelSocket Daemon.
+// DESC : The i2c management source for lis3dh accelerometer.
 //----------------------------------------------------------------------------//
-// HIST : $Log: libAccelSocket.h,v $
+// HIST : $Log: AccelSocketd_i2c.h,v $
 // HIST : Version |   Date   | Author | Description                           
 //        --------------------------------------------------------------------
 //         01.00  | 24/07/14 |  JTou  | Initial version
 //                |          |        |
 //############################################################################//
 
-#ifndef __LIBACCELSOCKET_H__
-#define __LIBACCELSOCKET_H__
+#ifndef __ACCELSOCKETD_I2C_H__
+#define __ACCELSOCKETD_I2C_H__
 
 //****************************************************************************//
 // INCLIB
 //****************************************************************************//
-#include <stdint.h>
-#include <sys/types.h>
+
 
 //****************************************************************************//
 // INCUSER
@@ -34,26 +33,18 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-#define LIBACCELSOCKET_MAX_FRAME_SIZE								16
+// I2C setup
+#define ACCELSOCKETD_I2C_ADAPTER				((char)0x00)
+#define ACCELSOCKETD_I2C_ADDRESS				((char)0x24)
 
 //****************************************************************************//
-// MACRO
+// MACRO0x00
 //****************************************************************************//
   
 //****************************************************************************//
 // TYPEDEF
 //****************************************************************************//
-typedef enum {FALSE = 0, TRUE = 1} elibAccelSocketBool;
-typedef char TstLibAccelSocketFrame[LIBACCELSOCKET_MAX_FRAME_SIZE];
 
-typedef struct{
-	/** @brief x: x value*/
-	uint16_t x;
-	/** @brief y: y value*/
-	uint16_t y;
-	/** @brief z: z value*/
-	uint16_t z;
-}TstAccel_XYZ;
 
 //****************************************************************************//
 // CONST
@@ -74,21 +65,17 @@ typedef struct{
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-elibAccelSocketBool	libAccelSocket_bOpen(void);
-void								libAccelSocket_vClose(void);
+elibAccelSocketBool I2c_bOpen(void);
+void I2c_vClose(void);
 
-elibAccelSocketBool libAccelSocket_bSetDataRate(uint8_t avu8DataRateConfiguration); // a value of 9 is the normal data rate according to LIS3DH datasheet
-elibAccelSocketBool libAccelSocket_bGetDataRate(uint8_t* apu8DataRateConfiguration);
-elibAccelSocketBool libAccelSocket_bSetScaleRange(uint8_t avu8ScaleRangeConfiguration);
-elibAccelSocketBool libAccelSocket_bGetScaleRange(uint8_t* apu8ScaleRangeConfiguration);
-elibAccelSocketBool libAccelSocket_bSetSelftestMode(uint8_t avu8Mode);
-/*
-elibAccelSocketBool libAccelSocket_bSetInterrupt(TstLibAccelSocketFrame ats8Reply, uint32_t* apu32Size);
-elibAccelSocketBool libAccelSocket_bClearInterrupt(TstLibAccelSocketFrame ats8Reply, uint32_t* apu32Size);
-*/
-elibAccelSocketBool libAccelSocket_bGetXYZ(TstAccel_XYZ* apstAccel);
-elibAccelSocketBool libAccelSocket_bReadRegister(uint8_t avu8Register, uint8_t* apu8Value);
-elibAccelSocketBool libAccelSocket_bWriteRegister(uint8_t avu8Register, uint8_t avu8Value);
+elibAccelSocketBool I2c_bReadRegister(uint8_t avu8Register, uint8_t* apu8Value);
+elibAccelSocketBool I2c_bWriteRegister(uint8_t avu8Register, uint8_t avu8Value);
+elibAccelSocketBool I2c_bSetDataRate(uint8_t avu8DataRate);
+elibAccelSocketBool I2c_bGetDataRate(uint8_t* apu8DataRate);
+elibAccelSocketBool I2c_bSetScaleRange(uint8_t avu8Scale);
+elibAccelSocketBool I2c_bGetScaleRange(uint8_t* apu8Scale);
+elibAccelSocketBool I2c_bSetSelfTestMode(uint8_t avu8Mode);
+elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel);
 
 #endif
 

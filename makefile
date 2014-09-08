@@ -6,7 +6,8 @@ DEBUG = y
 # Targets definition
 DAEMON_TARGET = AccelSocketd
 DAEMON_SRCS =	./src/AccelSocketd_main.c \
-							./src/AccelSocketd_server.c
+							./src/AccelSocketd_server.c \
+							./src/AccelSocketd_i2c.c
 DAEMON_OBJS = $(DAEMON_SRCS:.c=.o)
 
 CLIENT_TARGET = AccelSocketClient

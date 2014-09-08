@@ -28,14 +28,14 @@
 #include <syslog.h>
 #include <string.h>
 #include <sched.h>
-#include <linux/i2c-dev.h>
+
 
 //****************************************************************************//
 // INCUSER
 //****************************************************************************// 
 #include "AccelSocketd.h"
-#include "lis3dh.h"
 #include "AccelSocketd_server.h"
+#include "AccelSocketd_i2c.h"
 
 //****************************************************************************//
 // DEFINITION
@@ -61,7 +61,7 @@
 // INTERN
 //****************************************************************************//
 static volatile int	s_iExitFlag = 0;	// see http://www.linuxprogrammingblog.com/all-about-linux-signals?page=show
-static int					s_iAccelFd = -1;
+
 
 //****************************************************************************//
 // REG
@@ -214,16 +214,10 @@ int main(int argc, char **argv)
 	}
 		
 	// Open I2C-dev
-	/*
-	snprintf(tempStr, 19, "/dev/i2c-%d", ACCELSOCKETD_I2C_ADAPTER);	
-	s_iAccelFd = open(tempStr, O_RDWR);
-	if (s_iAccelFd < 0)
+	if (!I2c_bOpen())
 	{
-		// ERROR HANDLING; you can check errno to see what went wrong
-		syslog(LOG_INFO, "Can't open I2C device %s",tempStr);
 		exit(EXIT_FAILURE);
-	}	
-	*/
+	}
 	
 	// Init the local namespaced socket server
 	if (!bServer_init())
@@ -245,15 +239,12 @@ int main(int argc, char **argv)
 	// Terminate server
 	vServer_terminate();
 
+	// Close I2C-dev
+	I2c_vClose();
+	
 	// Close the log
 	syslog(LOG_INFO, "Terminated");
 	closelog();
-	
-	// Close I2C-dev
-	if (s_iAccelFd>=0)
-	{
-		close(s_iAccelFd);
-	}
 	
 	return 0;
 }

@@ -37,12 +37,6 @@
 #define ACCELSOCKETD_STRING_VERSION			"V01.00.00"
 
 
-// I2C setup
-#define ACCELSOCKETD_I2C_ADAPTER				((char)0x00)
-#define ACCELSOCKETD_I2C_ADDRESS				((char)0x00)
-
-
-
 //****************************************************************************//
 // MACRO
 //****************************************************************************//

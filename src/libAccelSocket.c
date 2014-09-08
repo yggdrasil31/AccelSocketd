@@ -73,8 +73,57 @@ struct sockaddr_un 	stServerAddress;
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-elibAccelSocketBool libAccelSocket_bComServer(TYPE_LibAccelSocketFrame ats8Request, TYPE_LibAccelSocketFrame ats8Reply,uint32_t* apu32Size);
+elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request, TstLibAccelSocketFrame ats8Reply);
 
+
+
+elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request, TstLibAccelSocketFrame ats8Reply)
+{	
+	int32_t										lvs32BytesSent = 0;
+	uint32_t 									lvu32Size = 0;
+	elibAccelSocketBool				lvbResult = FALSE;
+	
+	
+	// Try to send it		
+	if (s32ClientSocket>=0)
+	{
+#ifdef DEBUG
+		printf("libAccelSocket_bComServer : trying to send 0x%02X\n", ats8Request[0]);
+#endif
+
+		lvs32BytesSent = sendto(s32ClientSocket, (char *) ats8Request, LIBACCELSOCKET_MAX_FRAME_SIZE, 0, (struct sockaddr *) &stServerAddress, sizeof(struct sockaddr_un));
+
+#ifdef DEBUG
+		printf("libAccelSocket_bComServer : %d bytes sent\n", lvs32BytesSent);
+#endif
+
+		if (lvs32BytesSent == LIBACCELSOCKET_MAX_FRAME_SIZE)
+		{				
+			lvu32Size = read(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE);
+			if (lvu32Size == LIBACCELSOCKET_MAX_FRAME_SIZE)
+			{
+				lvbResult = TRUE;			
+#ifdef DEBUG
+				printf("libAccelSocket_bComServer : %d bytes received from server\n",lvu32Size);
+#endif
+			}
+		}
+		else
+		{
+#ifdef DEBUG
+			printf("libAccelSocket_bComServer : could not send data to the server\n");
+#endif
+		}
+	}
+	else
+	{
+#ifdef DEBUG
+		printf("libAccelSocket_bComServer : client socket not opened\n");
+#endif
+	}
+		
+	return lvbResult;
+}
 
 
 elibAccelSocketBool libAccelSocket_bOpen(void)
@@ -129,96 +178,225 @@ void libAccelSocket_vClose(void)
 }
 
 
-elibAccelSocketBool libAccelSocket_bSetDataRate(TYPE_LibAccelSocketFrame ats8Reply,uint32_t* apu32Size)
+elibAccelSocketBool libAccelSocket_bSetDataRate(uint8_t avu8DataRateConfiguration)
 {
-	elibAccelSocketBool				lvbResult = FALSE;
-	TYPE_LibAccelSocketFrame	lts8Request = {0};
+	elibAccelSocketBool			lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
 	
 	
 	// Prepare the request frame
-	lts8Request[0] = SERVER_PROTOCOL_SET_DATA_RATE;
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_SET_DATA_RATE;
+	lts8Request[SERVER_OFFSET_PARAM1] = avu8DataRateConfiguration;
 	
 	// Send it to the server
-	lvbResult = libAccelSocket_bComServer(lts8Request, ats8Reply, apu32Size);
+	if(libAccelSocket_bComServer(lts8Request, lts8Reply))
+	{
+		// Get the result
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
+		{
+			lvbResult = TRUE;
+		}
+	}
 	
 	return lvbResult;
 }
 
 
-elibAccelSocketBool libAccelSocket_bGetDataRate(TYPE_LibAccelSocketFrame ats8Reply,uint32_t* apu32Size)
+elibAccelSocketBool libAccelSocket_bGetDataRate(uint8_t* apu8DataRateConfiguration)
+{
+	elibAccelSocketBool			lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
+	
+	// Prepare the request frame
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_GET_DATA_RATE;
+	
+	// Send it to the server
+	if (libAccelSocket_bComServer(lts8Request, lts8Reply))
+	{
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
+		{
+			*apu8DataRateConfiguration = lts8Reply[SERVER_OFFSET_PARAM1];
+			lvbResult = TRUE;
+		}
+	}
+	
+	return lvbResult;
+}
+
+elibAccelSocketBool libAccelSocket_bSetScaleRange(uint8_t avu8ScaleRangeConfiguration)
+{
+	elibAccelSocketBool			lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
+	
+	// Prepare the request frame
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_SET_SCALE_RANGE;
+	lts8Request[SERVER_OFFSET_PARAM1] = avu8ScaleRangeConfiguration;
+	
+	// Send it to the server
+	if(libAccelSocket_bComServer(lts8Request, lts8Reply))
+	{
+		// Get the result
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
+		{
+			lvbResult = TRUE;
+		}
+	}
+	
+	return lvbResult;
+}	
+
+
+elibAccelSocketBool libAccelSocket_bGetScaleRange(uint8_t* apu8ScaleRangeConfiguration)
+{
+	elibAccelSocketBool			lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
+	
+	// Prepare the request frame
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_GET_SCALE_RANGE;
+	
+	// Send it to the server
+	if (libAccelSocket_bComServer(lts8Request, lts8Reply))
+	{
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
+		{
+			*apu8ScaleRangeConfiguration = lts8Reply[SERVER_OFFSET_PARAM1];
+			lvbResult = TRUE;
+		}
+	}
+	
+	return lvbResult;
+}	
+
+
+elibAccelSocketBool libAccelSocket_bSetSelftestMode(uint8_t avu8Mode)
+{
+	elibAccelSocketBool			lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
+	
+	// Prepare the request frame
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_SET_SELFTEST_MODE;
+	lts8Request[SERVER_OFFSET_PARAM1] = avu8Mode;
+	
+	// Send it to the server
+	if(libAccelSocket_bComServer(lts8Request, lts8Reply))
+	{
+		// Get the result
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
+		{
+			lvbResult = TRUE;
+		}
+	}
+	
+	return lvbResult;
+}
+
+/*
+elibAccelSocketBool libAccelSocket_bSetInterrupt(TstLibAccelSocketFrame ats8Reply, uint32_t* apu32Size)
 {
 	elibAccelSocketBool				lvbResult = FALSE;
-	TYPE_LibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Request = {0};
 	
 	
 	// Prepare the request frame
-	lts8Request[0] = SERVER_PROTOCOL_GET_DATA_RATE;
+	lts8Request[0] = SERVER_CMD_SET_INTERRUPT;
 	
 	// Send it to the server
-	lvbResult = libAccelSocket_bComServer(lts8Request, ats8Reply, apu32Size);
+	lvbResult = libAccelSocket_bComServer(lts8Request, ats8Reply);
+		
+	return lvbResult;
+}	
+
+
+elibAccelSocketBool libAccelSocket_bClearInterrupt(TstLibAccelSocketFrame ats8Reply, uint32_t* apu32Size)
+{
+	elibAccelSocketBool				lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	
+	
+	// Prepare the request frame
+	lts8Request[0] = SERVER_CMD_CLEAR_INTERRUPT;
+	
+	// Send it to the server
+	lvbResult = libAccelSocket_bComServer(lts8Request, ats8Reply);
 		
 	return lvbResult;
 }
-
-
-/*
-#define SERVER_PROTOCOL_GET_DATA_RATE				1
-#define SERVER_PROTOCOL_SET_SCALE_RANGE			2
-#define SERVER_PROTOCOL_GET_SCALE_RANGE			3
-#define SERVER_PROTOCOL_SET_SELFTEST_MODE		4
-#define SERVER_PROTOCOL_SET_INTERRUPT				5
-#define SERVER_PROTOCOL_CLEAR_INTERRUPT			6
-#define SERVER_PROTOCOL_GET_XYZ							7
-#define SERVER_PROTOCOL_READ_REGISTER				8
-#define SERVER_PROTOCOL_WRITE_REGISTER			9
 */
 
 
-elibAccelSocketBool libAccelSocket_bComServer(TYPE_LibAccelSocketFrame ats8Request, TYPE_LibAccelSocketFrame ats8Reply,uint32_t* apu32Size)
+elibAccelSocketBool libAccelSocket_bGetXYZ(TstAccel_XYZ* apstAccel)
 {
-	//socklen_t									lvs32AddressLength;
-	int32_t										lvs32BytesSent = 0;
-	elibAccelSocketBool				lvbResult = FALSE;
+	elibAccelSocketBool			lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
 	
-	// Try to send it	
-	*apu32Size = 0;	
-	if (s32ClientSocket>=0)
+	// Prepare the request frame
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_GET_XYZ;
+	
+	// Send it to the server
+	if (libAccelSocket_bComServer(lts8Request, lts8Reply))
 	{
-#ifdef DEBUG
-		printf("libAccelSocket_bComServer : trying to send 0x%02X\n", ats8Request[0]);
-#endif
-
-		lvs32BytesSent = sendto(s32ClientSocket, (char *) ats8Request, LIBACCELSOCKET_MAX_FRAME_SIZE, 0, (struct sockaddr *) &stServerAddress, sizeof(struct sockaddr_un));
-
-#ifdef DEBUG
-		printf("libAccelSocket_bComServer : %d bytes sent\n", lvs32BytesSent);
-#endif
-
-		if (lvs32BytesSent>0)
-		{		
-			//lvs32AddressLength = sizeof(struct sockaddr_un);
-			//*apu32Size = recvfrom(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE, 0, (struct sockaddr *) &(stServerAddress), &lvs32AddressLength);
-			*apu32Size = read(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE);
-			lvbResult = TRUE;
-			
-#ifdef DEBUG
-			printf("libAccelSocket_bComServer : %d bytes received from server\n",*apu32Size);
-#endif
-
-		}
-		else
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
 		{
-#ifdef DEBUG
-			printf("libAccelSocket_bComServer : could not send data to the server\n");
-#endif
+			memcpy((char*)apstAccel, &lts8Reply[SERVER_OFFSET_PARAM1], sizeof(TstAccel_XYZ) );
+			lvbResult = TRUE;
 		}
 	}
-	else
-	{
-#ifdef DEBUG
-		printf("libAccelSocket_bComServer : client socket not opened\n");
-#endif
-	}
-		
+	
 	return lvbResult;
 }
+
+
+elibAccelSocketBool libAccelSocket_bReadRegister(uint8_t avu8Register, uint8_t* apu8Value)
+{
+	elibAccelSocketBool			lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
+		
+	// Prepare the request frame
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_READ_REGISTER;
+	lts8Request[SERVER_OFFSET_PARAM1] = avu8Register;
+	
+	// Send it to the server
+	if(libAccelSocket_bComServer(lts8Request, lts8Reply))
+	{
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
+		{
+			*apu8Value = lts8Reply[SERVER_OFFSET_PARAM1];
+			lvbResult = TRUE;
+		}
+	}
+	
+	return lvbResult;
+}	
+
+
+elibAccelSocketBool libAccelSocket_bWriteRegister(uint8_t avu8Register, uint8_t avu8Value)
+{
+	elibAccelSocketBool				lvbResult = FALSE;
+	TstLibAccelSocketFrame	lts8Request = {0};
+	TstLibAccelSocketFrame	lts8Reply = {0};
+		
+	// Prepare the request frame
+	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_WRITE_REGISTER;
+	lts8Request[SERVER_OFFSET_PARAM1] = avu8Register;
+	lts8Request[SERVER_OFFSET_PARAM2] = avu8Value;
+	
+	// Send it to the server
+	if (libAccelSocket_bComServer(lts8Request, lts8Reply))
+	{
+		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
+		{
+			lvbResult = TRUE;
+		}
+	}
+	
+	return lvbResult;
+}	
+
+
