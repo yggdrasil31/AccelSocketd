@@ -40,7 +40,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-#define CLIENT_SOCKET_NAME "/tmp/myAccelSocketClient"
+
 
 //****************************************************************************//
 // MACRO
@@ -64,7 +64,7 @@
 int									s32ClientSocket = -1;
 struct sockaddr_un	stClientAddress;
 struct sockaddr_un 	stServerAddress;
-
+char 								ts8ClientSocketName[LIBACCELSOCKET_MAX_SOCKETNAME_SIZE];
 
 //****************************************************************************//
 // REG
@@ -126,24 +126,29 @@ elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request
 }
 
 
-elibAccelSocketBool libAccelSocket_bOpen(void)
+elibAccelSocketBool libAccelSocket_bOpen(char* aps8ClientSocketName)
 {	
 	elibAccelSocketBool lvbResult = FALSE;
 			
-	if((s32ClientSocket = socket(AF_UNIX, SOCK_DGRAM, 0)) >= 0)
+	if (strlen(aps8ClientSocketName)<LIBACCELSOCKET_MAX_SOCKETNAME_SIZE)
 	{
-		memset(&stClientAddress, 0, sizeof(struct sockaddr_un));
-		stClientAddress.sun_family = AF_UNIX;
-		strcpy(stClientAddress.sun_path, CLIENT_SOCKET_NAME);
-		
-		unlink(CLIENT_SOCKET_NAME);
-		if(bind(s32ClientSocket, (const struct sockaddr *) &stClientAddress, sizeof(struct sockaddr_un))>=0)
+		if((s32ClientSocket = socket(AF_UNIX, SOCK_DGRAM, 0)) >= 0)
 		{
-			lvbResult = TRUE;
+			strcpy(ts8ClientSocketName,aps8ClientSocketName);
+		
+			memset(&stClientAddress, 0, sizeof(struct sockaddr_un));
+			stClientAddress.sun_family = AF_UNIX;
+			strcpy(stClientAddress.sun_path, ts8ClientSocketName);
 			
-			memset(&stServerAddress, 0, sizeof(struct sockaddr_un));
-			stServerAddress.sun_family = AF_UNIX;
-			strcpy(stServerAddress.sun_path, SERVER_SOCKET_NAME);
+			unlink(ts8ClientSocketName);
+			if(bind(s32ClientSocket, (const struct sockaddr *) &stClientAddress, sizeof(struct sockaddr_un))>=0)
+			{
+				memset(&stServerAddress, 0, sizeof(struct sockaddr_un));
+				stServerAddress.sun_family = AF_UNIX;
+				strcpy(stServerAddress.sun_path, SERVER_SOCKET_NAME);
+				
+				lvbResult = TRUE;
+			}
 		}		
 	}
 	
@@ -167,7 +172,7 @@ void libAccelSocket_vClose(void)
 		s32ClientSocket = -1;
 		
 		// Remove the socket file
-		unlink (CLIENT_SOCKET_NAME);
+		unlink (ts8ClientSocketName);
 	}
 	else
 	{

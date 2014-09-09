@@ -34,6 +34,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
+#define LIBACCELSOCKET_MAX_SOCKETNAME_SIZE					64
 #define LIBACCELSOCKET_MAX_FRAME_SIZE								16
 
 //****************************************************************************//
@@ -74,7 +75,7 @@ typedef struct{
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-elibAccelSocketBool	libAccelSocket_bOpen(void);
+elibAccelSocketBool libAccelSocket_bOpen(char* aps8ClientSocketName);
 void								libAccelSocket_vClose(void);
 
 elibAccelSocketBool libAccelSocket_bSetDataRate(uint8_t avu8DataRateConfiguration); // a value of 9 is the normal data rate according to LIS3DH datasheet

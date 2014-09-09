@@ -41,7 +41,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-
+#define CLIENT_SOCKET_NAME "/tmp/myAccelSocketClient"
 
 //****************************************************************************//
 // MACRO
@@ -83,7 +83,7 @@ int main(int argc, char **argv)
 	uint8_t										lvu8Register;
 	
 	
-	lbResult = libAccelSocket_bOpen();
+	lbResult = libAccelSocket_bOpen(CLIENT_SOCKET_NAME);
 	if (lbResult == TRUE)
 	{	
 		do
