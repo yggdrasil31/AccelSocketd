@@ -35,7 +35,7 @@
 //****************************************************************************// 
 // I2C setup
 #define ACCELSOCKETD_I2C_ADAPTER				((char)0x00)
-#define ACCELSOCKETD_I2C_ADDRESS				((char)0x24)
+#define ACCELSOCKETD_I2C_ADDRESS				((char)0x18)
 
 //****************************************************************************//
 // MACRO0x00
