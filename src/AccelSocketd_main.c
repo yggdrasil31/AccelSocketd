@@ -216,13 +216,15 @@ int main(int argc, char **argv)
 	// Open I2C-dev
 	if (!I2c_bOpen())
 	{
-		I2c_bClose())
+		I2c_vClose();
 		exit(EXIT_FAILURE);
 	}
 	
 	// Init the local namespaced socket server
 	if (!bServer_init())
 	{
+		I2c_vClose();
+		vServer_terminate();
 		exit(EXIT_FAILURE);
 	}
 	
