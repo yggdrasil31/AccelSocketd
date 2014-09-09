@@ -76,7 +76,7 @@ static void s_vHandleSig(int sig);
 
 
 //============================================================================//
-// NAME : accel ioctl
+// NAME : s_vHandleSig
 //============================================================================//
 // ROLE :
 //----------------------------------------------------------------------------//
@@ -87,64 +87,25 @@ static void s_vHandleSig(int sig);
 // RETURN:
 //----------------------------------------------------------------------------//
 //============================================================================//
-/*
-int accel_lis3dh_Ioctl(int req, void * argp)
-{
-
-
-	if(stAccel_lis3dh_Infos.iIsOpen == true)
-	{
-
-		switch(req)
-		{
-			case ACCEL_SET_DATARATE:
-				return(accel_lis3dh_SetDataRate((TAccel_DataRate)argp));
-			case ACCEL_GET_DATARATE:
-				return(accel_lis3dh_GetDataRate((TAccel_DataRate*)argp));
-			case ACCEL_SET_SCALERANGE:
-				return(accel_lis3dh_SetScaleRange((TAccel_Accel)argp));
-			case ACCEL_GET_SCALERANGE:
-				return(accel_lis3dh_GetScaleRange((TAccel_Accel*)argp));
-#if ( defined(LIS3DH_INT1_OPEN) || defined(LIS3DH_INT2_OPEN) )
-			case ACCEL_SET_INTERRUPT:
-				return(accel_lis3dh_SetInterrupt((TpfcAccel_Callback)argp));
-			case ACCEL_CLR_INTERRUPT:
-				return(accel_lis3dh_ClrInterrupt());
-#endif	//#if ( defined(LIS3DH_INT1_OPEN) || defined(LIS3DH_INT2_OPEN) )
-			case ACCEL_GET_XYZ:
-				return(accel_lis3dh_GetXYZ((TstAccel_XYZ*)argp));
-			case ACCEL_READ_REGISTER:
-				return(accel_lis3dh_ReadReg((TstAccel_RegAccess*)argp));
-			case ACCEL_WRITE_REGISTER:
-				return(accel_lis3dh_WriteReg((TstAccel_RegAccess*)argp));
-#ifdef LIS3DH_INT1_OPEN
-			case ACCEL_ENABLE_MOTION_DETECT_INT1:
-				return accel_lis3dh_EnableMotionDetect((TstAccel_MotionDetectParam *)argp);
-			case ACCEL_DISABLE_MOTION_DETECT_INT1:
-				return accel_lis3dh_DisableMotionDetect();
-			case ACCEL_ENABLE_DRDY_INT1:
-				return accel_lis3dh_EnableDrdyIt();
-			case ACCEL_DISABLE_DRDY_INT1:
-				return accel_lis3dh_DisableDrdyIt();
-#endif	//#ifdef LIS3DH_INT1_OPEN
-			default:
-			break;
-		}
-	}
-	else
-		return(LOWLEVEL_ERROR_ACCEL_DRIVERNOTOPEN);
-		
-	return(LOWLEVEL_NO_ERROR);
-}
-*/
-
-
 static void s_vHandleSig (int sig)
 {
+	syslog(LOG_INFO, "s_vHandleSig : signal caught");
 	s_iExitFlag = 1;
 }
 
 
+//============================================================================//
+// NAME : s_vProcess
+//============================================================================//
+// ROLE :
+//----------------------------------------------------------------------------//
+// INPUT :
+//
+// OUTPUT :
+//
+// RETURN:
+//----------------------------------------------------------------------------//
+//============================================================================//
 static void s_vProcess(void)
 {
 	syslog (LOG_NOTICE, "... still running ...");
@@ -152,6 +113,18 @@ static void s_vProcess(void)
 }
 
 
+//============================================================================//
+// NAME : main
+//============================================================================//
+// ROLE :
+//----------------------------------------------------------------------------//
+// INPUT :
+//
+// OUTPUT :
+//
+// RETURN:
+//----------------------------------------------------------------------------//
+//============================================================================//
 int main(int argc, char **argv)
 {
 	pid_t							pid, sid;
@@ -188,7 +161,6 @@ int main(int argc, char **argv)
 	{
 		exit(EXIT_FAILURE);
 	}
-
 	
 	// Change Directory
 	// If we cant find the directory we exit with failure.
