@@ -216,6 +216,7 @@ int main(int argc, char **argv)
 	// Open I2C-dev
 	if (!I2c_bOpen())
 	{
+		I2c_bClose())
 		exit(EXIT_FAILURE);
 	}
 	
