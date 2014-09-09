@@ -174,13 +174,13 @@ elibAccelSocketBool I2c_bReadRegister(uint8_t avu8Register, uint8_t* apu8Value)
 		}
 		else
 		{			
-			syslog(LOG_INFO, "I2c_ReadRegister : Read %02X in register %02X",*apu8Value, avu8Register);
+			syslog(LOG_INFO, "I2c_ReadRegister : Read 0x%02X in register 0x%02X",*apu8Value, avu8Register);
 			lvbResult = TRUE;
 		}
 	}
 	else
 	{
-		syslog(LOG_INFO, "I2c_ReadRegister : Writing register %02X failed",avu8Register);
+		syslog(LOG_INFO, "I2c_ReadRegister : Writing register 0x%02X NOK",avu8Register);
 	}
 	
 	return lvbResult;
@@ -200,13 +200,13 @@ elibAccelSocketBool I2c_bReadPairedRegister(uint8_t avu8Register, uint16_t* apu1
 		else
 		{
 			*apu16Value = (((uint16_t)ltu8Buff[1])<<8) | ((uint16_t)ltu8Buff[0]);
-			syslog(LOG_INFO, "I2c_bReadPairedRegister : Read %04X in register %02X",*apu16Value, avu8Register);
+			syslog(LOG_INFO, "I2c_bReadPairedRegister : Read 0x%04X in register 0x%02X",*apu16Value, avu8Register);
 			lvbResult = TRUE;
 		}
 	}
 	else
 	{
-		syslog(LOG_INFO, "I2c_bReadPairedRegister : Writing register %02X failed",avu8Register);
+		syslog(LOG_INFO, "I2c_bReadPairedRegister : Writing register 0x%02X NOK",avu8Register);
 	}
 	
 	return lvbResult;
@@ -222,13 +222,13 @@ elibAccelSocketBool I2c_bWriteRegister(uint8_t avu8Register, uint8_t avu8Value)
 	ltu8Buff[1] = avu8Value;
 	
 	if (write(s_iAccelFd, ltu8Buff, 2) == 2)
-	{
-		syslog(LOG_INFO, "I2c_WriteRegister : Write %02X in register %02X ko",avu8Value, avu8Register);
+	{	
+		syslog(LOG_INFO, "I2c_WriteRegister : Write 0x%02X in register 0x%02X OK",avu8Value, avu8Register);
+		lvbResult = TRUE;
 	}
 	else
-	{			
-		syslog(LOG_INFO, "I2c_WriteRegister : Write %02X in register %02X ok",avu8Value, avu8Register);
-		lvbResult = TRUE;	
+	{
+		syslog(LOG_INFO, "I2c_WriteRegister : Write 0x%02X in register 0x%02X NOK",avu8Value, avu8Register);
 	}
 	
 	return lvbResult;
@@ -246,12 +246,13 @@ elibAccelSocketBool I2c_bWritePairedRegister(uint8_t avu8Register, uint16_t avu1
 	
 	if (write(s_iAccelFd, ltu8Buff, 3) == 3)
 	{
-		syslog(LOG_INFO, "I2c_bWritePairedRegister : Write %04X in register %02X ko",avu16Value, avu8Register);
+		syslog(LOG_INFO, "I2c_bWritePairedRegister : Write 0x%04X in register 0x%02X OK",avu16Value, avu8Register);
+		lvbResult = TRUE;	
 	}
 	else
-	{			
-		syslog(LOG_INFO, "I2c_bWritePairedRegister : Write %04X in register %02X ok",avu16Value, avu8Register);
-		lvbResult = TRUE;	
+	{
+		syslog(LOG_INFO, "I2c_bWritePairedRegister : Write 0x%04X in register 0x%02X NOK",avu16Value, avu8Register);
+		
 	}
 	
 	return lvbResult;
