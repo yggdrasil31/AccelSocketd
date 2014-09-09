@@ -191,6 +191,7 @@ elibAccelSocketBool I2c_bReadPairedRegister(uint8_t avu8Register, uint16_t* apu1
 	elibAccelSocketBool	lvbResult = FALSE;
 	uint8_t							ltu8Buff[2] = {0};
 	
+	/*
 	if (write(s_iAccelFd, &avu8Register, 1) == 1)
 	{
 		if (read(s_iAccelFd, ltu8Buff, 2) != 2)
@@ -207,6 +208,17 @@ elibAccelSocketBool I2c_bReadPairedRegister(uint8_t avu8Register, uint16_t* apu1
 	else
 	{
 		syslog(LOG_INFO, "I2c_bReadPairedRegister : Writing register 0x%02X NOK",avu8Register);
+	}
+	*/
+	if (I2c_bReadRegister(avu8Register, &ltu8Buff[0]))
+	{
+		if (I2c_bReadRegister(avu8Register+1, &ltu8Buff[1]))
+		{
+			*apu16Value = ((uint16_t)ltu8Buff[1]) << 8;
+			*apu16Value |= ltu8Buff[0];
+			syslog(LOG_INFO, "I2c_bReadPairedRegister : Read 0x%04X in register 0x%02X",*apu16Value, avu8Register);
+			lvbResult = TRUE;
+		}
 	}
 	
 	return lvbResult;
