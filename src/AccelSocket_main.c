@@ -111,7 +111,10 @@ int main(int argc, char **argv)
 					break;
 					
 				case SERVER_CMD_GET_DATA_RATE:
-					libAccelSocket_bGetDataRate(&lvu8Value);
+					if(libAccelSocket_bGetDataRate(&lvu8Value))
+					{
+						printf("Data rate is %d\n",lvu8Value);
+					}
 					break;
 					
 				case SERVER_CMD_SET_SCALE_RANGE:
@@ -119,7 +122,12 @@ int main(int argc, char **argv)
 					break;
 					
 				case SERVER_CMD_GET_SCALE_RANGE:
-					libAccelSocket_bGetScaleRange(&lvu8Value);
+					
+					if(libAccelSocket_bGetScaleRange(&lvu8Value))
+					{
+						printf("Scale range is %d\n",lvu8Value);
+					}
+					
 					break;
 					
 				case SERVER_CMD_SET_SELFTEST_MODE:
@@ -138,6 +146,11 @@ int main(int argc, char **argv)
 					
 				case SERVER_CMD_GET_XYZ:
 					libAccelSocket_bGetXYZ(&lstAccel);
+					{
+						printf("x is %d\n",lstAccel.x);
+						printf("y is %d\n",lstAccel.y);
+						printf("z is %d\n",lstAccel.z);
+					}
 					break;
 					
 				case SERVER_CMD_READ_REGISTER:
