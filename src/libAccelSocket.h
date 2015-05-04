@@ -69,7 +69,7 @@ typedef enum
 	LIBACCELSOCKET_RATE_400HZ,
 	LIBACCELSOCKET_RATE_LOW1600HZ,
 	LIBACCELSOCKET_RATE_NORMAL1250HZ_LOW5000HZ
-}	elibAccelRate;
+}	elibAccelocketRate;
 
 
 typedef struct
