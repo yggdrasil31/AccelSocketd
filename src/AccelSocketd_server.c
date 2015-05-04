@@ -116,7 +116,7 @@ void vServer_processListen(void)
 		
 	lvs32BytesReceived = recvfrom(s32ServerSocket,
 																lts8Request,
-																LIBACCELSOCKET_MAX_FRAME_SIZE,
+																SERVER_SOCKET_MAX_FRAME_SIZE,
 																0, 
 																(struct sockaddr *) &(lstClientAddress),
 																&s32AddressLength);
@@ -124,7 +124,7 @@ void vServer_processListen(void)
 	syslog(LOG_INFO, "vServer_processListen : %d bytes received",lvs32BytesReceived);
 	
 	if (	(lvs32BytesReceived>=1)
-			&&(lvs32BytesReceived<=LIBACCELSOCKET_MAX_FRAME_SIZE)	)
+			&&(lvs32BytesReceived<=SERVER_SOCKET_MAX_FRAME_SIZE)	)
 	{
 		lts8Reply[SERVER_OFFSET_CMD] = lts8Request[SERVER_OFFSET_CMD];
 		switch (lts8Request[SERVER_OFFSET_CMD])
@@ -228,7 +228,7 @@ void vServer_processListen(void)
 		// Sending reply to the client
 		lvs32BytesSent = sendto(s32ServerSocket,
 														lts8Reply,
-														LIBACCELSOCKET_MAX_FRAME_SIZE,
+														SERVER_SOCKET_MAX_FRAME_SIZE,
 														0,
 														(struct sockaddr *) &(lstClientAddress), 
 														s32AddressLength);

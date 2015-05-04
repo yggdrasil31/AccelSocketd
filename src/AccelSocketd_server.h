@@ -35,6 +35,7 @@
 //****************************************************************************// 
 
 #define SERVER_SOCKET_NAME									"/tmp/myAccelSocketServer"		// Unix Domain Socket name
+#define SERVER_SOCKET_MAX_FRAME_SIZE				16
 
 #define SERVER_OFFSET_CMD										0
 #define SERVER_OFFSET_PARAM1								1
@@ -63,7 +64,7 @@
 //****************************************************************************//
 // TYPEDEF
 //****************************************************************************//
-
+typedef char TstLibAccelSocketFrame[SERVER_SOCKET_MAX_FRAME_SIZE];
 
 //****************************************************************************//
 // CONST

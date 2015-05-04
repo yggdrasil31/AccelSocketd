@@ -40,6 +40,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
+#define LIBACCELSOCKET_MAX_SOCKETNAME_SIZE					64
 
 
 //****************************************************************************//
@@ -53,6 +54,8 @@
 //****************************************************************************//
 // CONST
 //****************************************************************************//
+const char ps8libAccelVersion[] = LIBACCELSOCKET_VERSION;
+
 
 //****************************************************************************//
 // EXPORT
@@ -91,16 +94,16 @@ elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request
 		printf("libAccelSocket_bComServer : trying to send 0x%02X\n", ats8Request[0]);
 #endif
 
-		lvs32BytesSent = sendto(s32ClientSocket, (char *) ats8Request, LIBACCELSOCKET_MAX_FRAME_SIZE, 0, (struct sockaddr *) &stServerAddress, sizeof(struct sockaddr_un));
+		lvs32BytesSent = sendto(s32ClientSocket, (char *) ats8Request, SERVER_SOCKET_MAX_FRAME_SIZE, 0, (struct sockaddr *) &stServerAddress, sizeof(struct sockaddr_un));
 
 #ifdef DEBUG
 		printf("libAccelSocket_bComServer : %d bytes sent\n", lvs32BytesSent);
 #endif
 
-		if (lvs32BytesSent == LIBACCELSOCKET_MAX_FRAME_SIZE)
+		if (lvs32BytesSent == SERVER_SOCKET_MAX_FRAME_SIZE)
 		{				
-			lvu32Size = read(s32ClientSocket, (char *) ats8Reply, LIBACCELSOCKET_MAX_FRAME_SIZE);
-			if (lvu32Size == LIBACCELSOCKET_MAX_FRAME_SIZE)
+			lvu32Size = read(s32ClientSocket, (char *) ats8Reply, SERVER_SOCKET_MAX_FRAME_SIZE);
+			if (lvu32Size == SERVER_SOCKET_MAX_FRAME_SIZE)
 			{
 				lvbResult = TRUE;			
 #ifdef DEBUG
@@ -123,6 +126,12 @@ elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request
 	}
 		
 	return lvbResult;
+}
+
+
+char libAccelSocket_ps8GetVersion(void)
+{
+	return ps8libAccelVersion;
 }
 
 
@@ -183,7 +192,7 @@ void libAccelSocket_vClose(void)
 }
 
 
-elibAccelSocketBool libAccelSocket_bSetDataRate(uint8_t avu8DataRateConfiguration)
+elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRateConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};
@@ -208,7 +217,7 @@ elibAccelSocketBool libAccelSocket_bSetDataRate(uint8_t avu8DataRateConfiguratio
 }
 
 
-elibAccelSocketBool libAccelSocket_bGetDataRate(uint8_t* apu8DataRateConfiguration)
+elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRateConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};
@@ -230,7 +239,7 @@ elibAccelSocketBool libAccelSocket_bGetDataRate(uint8_t* apu8DataRateConfigurati
 	return lvbResult;
 }
 
-elibAccelSocketBool libAccelSocket_bSetScaleRange(uint8_t avu8ScaleRangeConfiguration)
+elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8ScaleRangeConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};
@@ -254,7 +263,7 @@ elibAccelSocketBool libAccelSocket_bSetScaleRange(uint8_t avu8ScaleRangeConfigur
 }	
 
 
-elibAccelSocketBool libAccelSocket_bGetScaleRange(uint8_t* apu8ScaleRangeConfiguration)
+elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8ScaleRangeConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};

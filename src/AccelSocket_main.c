@@ -76,7 +76,7 @@
 int main(int argc, char **argv)
 {		
 	uint32_t									ls32Quit = FALSE;
-	uint32_t									lu32Choice;
+	uint8_t										lu8Choice;
 	elibAccelSocketBool				lbResult;
 	uint8_t										lvu8Value;
 	TstAccel_XYZ							lstAccel;
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 	{	
 		do
 		{
-			printf ("AccelSocket Client :\r\n");
+			printf ("AccelSocket Client using lib %s:\r\n",libAccelSocket_ps8GetVersion());
 			printf (" 0- SET_DATA_RATE\n");
 			printf (" 1- GET_DATA_RATE\n");
 			printf (" 2- SET_SCALE_RANGE\n");
@@ -101,9 +101,9 @@ int main(int argc, char **argv)
 			printf (" 9- WRITE_REGISTER\n");
 			printf ("10- QUIT\n");
 			
-			scanf("%d", &lu32Choice);
+			scanf("%d", &lu8Choice);
 			
-			printf ("executing %d\n",lu32Choice);
+			printf ("executing %d\n",lu8Choice);
 			switch (lu32Choice)
 			{
 				case SERVER_CMD_SET_DATA_RATE:

@@ -34,20 +34,46 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-#define LIBACCELSOCKET_MAX_SOCKETNAME_SIZE					64
-#define LIBACCELSOCKET_MAX_FRAME_SIZE								16
+#define LIBACCELSOCKET_VERSION "V01.00.00"
+
 
 //****************************************************************************//
 // MACRO
 //****************************************************************************//
-  
+
+
 //****************************************************************************//
 // TYPEDEF
 //****************************************************************************//
 typedef enum {FALSE = 0, TRUE = 1} elibAccelSocketBool;
-typedef char TstLibAccelSocketFrame[LIBACCELSOCKET_MAX_FRAME_SIZE];
 
-typedef struct{
+
+typedef enum
+{
+	LIBACCELSOCKET_SCALE_PLUSORMINUS2G = 0,
+	LIBACCELSOCKET_SCALE_PLUSORMINUS4G,
+	LIBACCELSOCKET_SCALE_PLUSORMINUS8G,
+	LIBACCELSOCKET_SCALE_PLUSORMINUS16G
+}	elibAccelSocketScale;
+
+
+typedef enum
+{
+	LIBACCELSOCKET_RATE_POWERDOWN = 0
+	LIBACCELSOCKET_RATE_1HZ
+	LIBACCELSOCKET_RATE_10HZ
+	LIBACCELSOCKET_RATE_25HZ
+	LIBACCELSOCKET_RATE_50HZ
+	LIBACCELSOCKET_RATE_100HZ
+	LIBACCELSOCKET_RATE_200HZ
+	LIBACCELSOCKET_RATE_400HZ
+	LIBACCELSOCKET_RATE_LOW1600HZ
+	LIBACCELSOCKET_RATE_NORMAL1250HZ_LOW5000HZ
+}	elibAccelRate;
+
+
+typedef struct
+{
 	/** @brief x: x value*/
 	uint16_t x;
 	/** @brief y: y value*/
@@ -75,18 +101,15 @@ typedef struct{
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
+char								libAccelSocket_ps8GetVersion(void);
 elibAccelSocketBool libAccelSocket_bOpen(char* aps8ClientSocketName);
 void								libAccelSocket_vClose(void);
 
-elibAccelSocketBool libAccelSocket_bSetDataRate(uint8_t avu8DataRateConfiguration); // a value of 9 is the normal data rate according to LIS3DH datasheet
-elibAccelSocketBool libAccelSocket_bGetDataRate(uint8_t* apu8DataRateConfiguration);
-elibAccelSocketBool libAccelSocket_bSetScaleRange(uint8_t avu8ScaleRangeConfiguration);
-elibAccelSocketBool libAccelSocket_bGetScaleRange(uint8_t* apu8ScaleRangeConfiguration);
+elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelRate avu8DataRateConfiguration);
+elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelRate* apu8DataRateConfiguration);
+elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8ScaleRangeConfiguration);
+elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8ScaleRangeConfiguration);
 elibAccelSocketBool libAccelSocket_bSetSelftestMode(uint8_t avu8Mode);
-/*
-elibAccelSocketBool libAccelSocket_bSetInterrupt(TstLibAccelSocketFrame ats8Reply, uint32_t* apu32Size);
-elibAccelSocketBool libAccelSocket_bClearInterrupt(TstLibAccelSocketFrame ats8Reply, uint32_t* apu32Size);
-*/
 elibAccelSocketBool libAccelSocket_bGetXYZ(TstAccel_XYZ* apstAccel);
 elibAccelSocketBool libAccelSocket_bReadRegister(uint8_t avu8Register, uint8_t* apu8Value);
 elibAccelSocketBool libAccelSocket_bWriteRegister(uint8_t avu8Register, uint8_t avu8Value);
