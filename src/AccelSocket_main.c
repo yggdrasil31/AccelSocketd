@@ -104,7 +104,7 @@ int main(int argc, char **argv)
 			scanf("%d", &lu8Choice);
 			
 			printf ("executing %d\n",lu8Choice);
-			switch (lu32Choice)
+			switch (lu8Choice)
 			{
 				case SERVER_CMD_SET_DATA_RATE:
 					libAccelSocket_bSetDataRate(9);
