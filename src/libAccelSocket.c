@@ -129,7 +129,7 @@ elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request
 }
 
 
-char libAccelSocket_ps8GetVersion(void)
+char* libAccelSocket_ps8GetVersion(void)
 {
 	return ps8libAccelVersion;
 }

@@ -101,7 +101,7 @@ typedef struct
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-char								libAccelSocket_ps8GetVersion(void);
+char*								libAccelSocket_ps8GetVersion(void);
 elibAccelSocketBool libAccelSocket_bOpen(char* aps8ClientSocketName);
 void								libAccelSocket_vClose(void);
 
