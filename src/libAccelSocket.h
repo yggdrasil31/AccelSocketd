@@ -69,7 +69,7 @@ typedef enum
 	LIBACCELSOCKET_RATE_400HZ,
 	LIBACCELSOCKET_RATE_LOW1600HZ,
 	LIBACCELSOCKET_RATE_NORMAL1250HZ_LOW5000HZ
-}	elibAccelocketRate;
+}	elibAccelSocketRate;
 
 
 typedef struct
@@ -105,8 +105,8 @@ char*								libAccelSocket_ps8GetVersion(void);
 elibAccelSocketBool libAccelSocket_bOpen(char* aps8ClientSocketName);
 void								libAccelSocket_vClose(void);
 
-elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelRate avu8DataRateConfiguration);
-elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelRate* apu8DataRateConfiguration);
+elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRateConfiguration);
+elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRateConfiguration);
 elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8ScaleRangeConfiguration);
 elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8ScaleRangeConfiguration);
 elibAccelSocketBool libAccelSocket_bSetSelftestMode(uint8_t avu8Mode);
