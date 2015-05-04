@@ -44,7 +44,7 @@
 #define LIS3DH_CTRL_REG5		0x24
 #define LIS3DH_CTRL_REG6		0x25
 #define LIS3DH_REFERENCE		0x26
-#define LIS3DH_STATUS_REG2		0x27
+#define LIS3DH_STATUS_REG		0x27
 #define LIS3DH_OUT_X_L			0x28
 #define LIS3DH_OUT_X_H			0x29
 #define LIS3DH_OUT_Y_L			0x2a
