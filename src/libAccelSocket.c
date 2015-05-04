@@ -286,7 +286,7 @@ elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8Scal
 }	
 
 
-elibAccelSocketBool libAccelSocket_bSetSelftestMode(uint8_t avu8Mode)
+elibAccelSocketBool libAccelSocket_bSetSelftestMode(elibAccelSocketSelfTestMode avu8Mode)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};

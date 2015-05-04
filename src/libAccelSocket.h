@@ -72,6 +72,13 @@ typedef enum
 }	elibAccelSocketRate;
 
 
+typedef enum
+{
+	LIBACCELSOCKET_SELFTESTMODE_OFF = 0,
+	LIBACCELSOCKET_SELFTESTMODE_0,
+	LIBACCELSOCKET_SELFTESTMODE_1
+}	elibAccelSocketSelfTestMode;
+
 typedef struct
 {
 	/** @brief x: x value*/
@@ -109,7 +116,7 @@ elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRate
 elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRateConfiguration);
 elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8ScaleRangeConfiguration);
 elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8ScaleRangeConfiguration);
-elibAccelSocketBool libAccelSocket_bSetSelftestMode(uint8_t avu8Mode);
+elibAccelSocketBool libAccelSocket_bSetSelftestMode(elibAccelSocketSelfTestMode avu8Mode);
 elibAccelSocketBool libAccelSocket_bGetXYZ(TstAccel_XYZ* apstAccel);
 elibAccelSocketBool libAccelSocket_bReadRegister(uint8_t avu8Register, uint8_t* apu8Value);
 elibAccelSocketBool libAccelSocket_bWriteRegister(uint8_t avu8Register, uint8_t avu8Value);
