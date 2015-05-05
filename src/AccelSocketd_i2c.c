@@ -356,7 +356,7 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 {
 	elibAccelSocketBool	lvbRet = FALSE;
 	unsigned char 			lvu8Register;
-	/*
+	
 	uint8_t							lvu8Val = 0;
 	uint16_t						lvu16Val = 0;
 	
@@ -380,7 +380,9 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 			}
 		}
 	}
-	*/
+	
+	
+	/*
 	lvu8Register = LIS3DH_OUT_X_L;
 	lvu8Register |= LIS3DH_MULTIPLEBYTE_MASK;
 	
@@ -396,6 +398,7 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 			lvbRet = TRUE;
 		}
 	}
+	*/
 	
 	return lvbRet;
 }
