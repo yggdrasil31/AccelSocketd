@@ -81,11 +81,11 @@ typedef enum
 
 typedef struct
 {
-	/** @brief x: x value*/
+	/** @brief x: x acceleration value*/
 	uint16_t x;
-	/** @brief y: y value*/
+	/** @brief y: y acceleration value*/
 	uint16_t y;
-	/** @brief z: z value*/
+	/** @brief z: z acceleration value*/
 	uint16_t z;
 }TstAccel_XYZ;
 
@@ -108,9 +108,12 @@ typedef struct
 //****************************************************************************//
 // PROTO
 //****************************************************************************//
-char*								libAccelSocket_ps8GetVersion(void);
+
+
 elibAccelSocketBool libAccelSocket_bOpen(char* aps8ClientSocketName);
 void								libAccelSocket_vClose(void);
+
+char*								libAccelSocket_ps8GetVersion(void);
 
 elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRateConfiguration);
 elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRateConfiguration);
