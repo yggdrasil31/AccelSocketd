@@ -78,7 +78,7 @@ int main(int argc, char **argv)
 	uint32_t									ls32Quit = FALSE;
 	uint32_t									lu32Choice;
 	elibAccelSocketBool				lbResult;
-	uint8_t										lvu8Value;
+	uint32_t									lvu32Value;
 	TstAccel_XYZ							lstAccel;
 	uint8_t										lvu8Register;
 	
@@ -111,9 +111,9 @@ int main(int argc, char **argv)
 					break;
 					
 				case SERVER_CMD_GET_DATA_RATE:
-					if(libAccelSocket_bGetDataRate(&((elibAccelSocketRate)lvu8Value)))
+					if(libAccelSocket_bGetDataRate(&lvu32Value))
 					{
-						printf("Data rate is %d\n",lvu8Value);
+						printf("Data rate is %d\n",lvu32Value);
 					}
 					break;
 					
@@ -123,9 +123,9 @@ int main(int argc, char **argv)
 					
 				case SERVER_CMD_GET_SCALE_RANGE:
 					
-					if(libAccelSocket_bGetScaleRange((elibAccelSocketScale)&lvu8Value)))
+					if(libAccelSocket_bGetScaleRange(&lvu32Value))
 					{
-						printf("Scale range is %d\n",lvu8Value);
+						printf("Scale range is %d\n",lvu32Value);
 					}
 					
 					break;
@@ -155,7 +155,8 @@ int main(int argc, char **argv)
 					
 				case SERVER_CMD_READ_REGISTER:
 					lvu8Register = LIS3DH_WHO_AM_I;
-					libAccelSocket_bReadRegister(lvu8Register, &lvu8Value);
+					libAccelSocket_bReadRegister(lvu8Register, &lvu32Value);
+					printf("register LIS3DH_WHO_AM_I holds %02X\n",lvu32Value);
 					break;
 					
 				case SERVER_CMD_WRITE_REGISTER:
