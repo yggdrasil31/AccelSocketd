@@ -1,7 +1,7 @@
 #OBJS = $(SRCS:.c=.o)
 
 # Comment/uncomment the following line to disable/enable debugging
-DEBUG = y
+DEBUG = n
 
 # Targets definition
 DAEMON_TARGET = AccelSocketd
@@ -10,9 +10,13 @@ DAEMON_SRCS =	./src/AccelSocketd_main.c \
 							./src/AccelSocketd_i2c.c
 DAEMON_OBJS = $(DAEMON_SRCS:.c=.o)
 
-CLIENT_TARGET = AccelSocketClient
+
+LIB_TARGET = libAccelSocket.a
+LIB_SRCS = ./src/libAccelSocket.c
+LIB_OBJS = $(LIBS_SRCS:.c=.o)
+
+CLIENT_TARGET = AccelSocketTestClient
 CLIENT_SRCS =	./src/AccelSocket_main.c \
-							./src/libAccelSocket.c
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 
 # FLAGS
@@ -30,7 +34,7 @@ ifeq ($(DEBUG),y)
 endif
 
 
-all: $(DAEMON_TARGET) $(CLIENT_TARGET)
+all: $(DAEMON_TARGET) $(LIB_TARGET) $(CLIENT_TARGET)
 
 clean:
 	rm -f $(DAEMON_OBJS) $(DAEMON_TARGET)
@@ -43,13 +47,19 @@ clean:
 $(DAEMON_TARGET): $(DAEMON_OBJS)
 	$(CC) -o $@ $(DAEMON_OBJS) $(LDLIBS)
 	
+	
+$(LIB_TARGET): $(LIB_OBJS)
+	$(CC) -o $@ $(LIB_OBJS)
+	
+	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
 	$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS)
-
+	
+	
 .PHONY: all clean
 
 install:
-	cp $(DAEMON_TARGET) $(DESTDIR)/bin/AccelSocketd
-	cp $(CLIENT_TARGET) $(DESTDIR)/bin/AccelSocketClient
+	cp $(DAEMON_TARGET) $(DESTDIR)/bin/
+	cp $(CLIENT_TARGET) $(DESTDIR)/bin/
 
 # DO NOT DELETE THIS LINE -- make depend needs it
