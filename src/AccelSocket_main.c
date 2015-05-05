@@ -94,8 +94,10 @@ int main(int argc, char **argv)
 			printf (" 2- SET_SCALE_RANGE\n");
 			printf (" 3- GET_SCALE_RANGE\n");
 			printf (" 4- SET_SELFTEST_MODE\n");
+			/*
 			printf (" 5- SET_INTERRUPT\n");
 			printf (" 6- CLEAR_INTERRUPT\n");
+			*/
 			printf (" 7- GET_XYZ\n");
 			printf (" 8- READ_REGISTER\n");
 			printf (" 9- WRITE_REGISTER\n");
