@@ -76,7 +76,7 @@
 int main(int argc, char **argv)
 {		
 	uint32_t									ls32Quit = FALSE;
-	uint8_t										lu8Choice;
+	uint32_t									lu32Choice;
 	elibAccelSocketBool				lbResult;
 	uint8_t										lvu8Value;
 	TstAccel_XYZ							lstAccel;
@@ -101,10 +101,10 @@ int main(int argc, char **argv)
 			printf (" 9- WRITE_REGISTER\n");
 			printf ("10- QUIT\n");
 			
-			scanf("%d", &lu8Choice);
+			scanf("%d", &lu32Choice);
 			
-			printf ("executing %d\n",lu8Choice);
-			switch (lu8Choice)
+			printf ("executing %d\n",lu32Choice);
+			switch (lu32Choice)
 			{
 				case SERVER_CMD_SET_DATA_RATE:
 					libAccelSocket_bSetDataRate(9);
