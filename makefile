@@ -13,7 +13,7 @@ DAEMON_OBJS = $(DAEMON_SRCS:.c=.o)
 
 LIB_TARGET = libAccelSocket.a
 LIB_SRCS = ./src/libAccelSocket.c
-LIB_OBJS = $(LIBS_SRCS:.c=.o)
+LIB_OBJS = $(LIB_SRCS:.c=.o)
 
 CLIENT_TARGET = AccelSocketTestClient
 CLIENT_SRCS =	./src/AccelSocket_main.c \
@@ -38,6 +38,7 @@ all: $(DAEMON_TARGET) $(LIB_TARGET) $(CLIENT_TARGET)
 
 clean:
 	rm -f $(DAEMON_OBJS) $(DAEMON_TARGET)
+	rm -f $(LIB_OBJS) $(LIB_TARGET)
 	rm -f $(CLIENT_OBJS) $(CLIENT_TARGET)
 
 %.o: %.c
@@ -49,7 +50,8 @@ $(DAEMON_TARGET): $(DAEMON_OBJS)
 	
 	
 $(LIB_TARGET): $(LIB_OBJS)
-	$(CC) -o $@ $(LIB_OBJS)
+	$(CC) -o $@ $(LIB_OBJS) $(LDLIBS)
+	$(AR) rcs $(LIB_TARGET) $(LIB_OBJS)
 	
 	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
