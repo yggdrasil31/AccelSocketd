@@ -55,7 +55,7 @@ $(LIB_TARGET): $(LIB_OBJS)
 	
 	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
-	$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS) -llibAccelSocket
+	$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS) -lAccelSocket
 	
 	
 .PHONY: all clean
