@@ -355,7 +355,7 @@ elibAccelSocketBool I2c_bSetSelfTestMode(uint8_t avu8Mode)
 elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 {
 	elibAccelSocketBool	lvbRet = FALSE;
-	unsigned char 			avu8Register;
+	unsigned char 			lvu8Register;
 	/*
 	uint8_t							lvu8Val = 0;
 	uint16_t						lvu16Val = 0;
@@ -393,7 +393,7 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 		else
 		{			
 			syslog(LOG_INFO, "I2c_bGetXYZ : Read successful");
-			lvbResult = TRUE;
+			lvbRet = TRUE;
 		}
 	}
 	
