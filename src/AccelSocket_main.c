@@ -111,7 +111,7 @@ int main(int argc, char **argv)
 					break;
 					
 				case SERVER_CMD_GET_DATA_RATE:
-					if(libAccelSocket_bGetDataRate(&lvu8Value))
+					if(libAccelSocket_bGetDataRate(&((elibAccelSocketRate)lvu8Value)))
 					{
 						printf("Data rate is %d\n",lvu8Value);
 					}
@@ -123,7 +123,7 @@ int main(int argc, char **argv)
 					
 				case SERVER_CMD_GET_SCALE_RANGE:
 					
-					if(libAccelSocket_bGetScaleRange(&lvu8Value))
+					if(libAccelSocket_bGetScaleRange((elibAccelSocketScale)&lvu8Value)))
 					{
 						printf("Scale range is %d\n",lvu8Value);
 					}
