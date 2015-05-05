@@ -16,7 +16,7 @@ LIB_SRCS = ./src/libAccelSocket.c
 LIB_OBJS = $(LIB_SRCS:.c=.o)
 
 CLIENT_TARGET = AccelSocketTestClient
-CLIENT_SRCS =	./src/AccelSocket_main.c \
+CLIENT_SRCS =	./src/AccelSocket_main.c
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 
 # FLAGS
