@@ -157,7 +157,7 @@ int main(int argc, char **argv)
 					
 				case SERVER_CMD_READ_REGISTER:
 					lvu8Register = LIS3DH_WHO_AM_I;
-					libAccelSocket_bReadRegister(lvu8Register, &lvu32Value);
+					libAccelSocket_bReadRegister(lvu8Register, (char*) &lvu32Value);
 					printf("register LIS3DH_WHO_AM_I holds %02X\n",lvu32Value);
 					break;
 					

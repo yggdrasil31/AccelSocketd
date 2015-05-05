@@ -82,9 +82,10 @@ elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request
 
 elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request, TstLibAccelSocketFrame ats8Reply)
 {	
-	int32_t										lvs32BytesSent = 0;
-	uint32_t 									lvu32Size = 0;
-	elibAccelSocketBool				lvbResult = FALSE;
+	int32_t								lvs32BytesSent = 0;
+	uint32_t 							lvu32Size = 0;
+	uint8_t								lvu8I;
+	elibAccelSocketBool		lvbResult = FALSE;
 	
 	
 	// Try to send it		
@@ -108,6 +109,10 @@ elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request
 				lvbResult = TRUE;			
 #ifdef DEBUG
 				printf("libAccelSocket_bComServer : %d bytes received from server\n",lvu32Size);
+				for (lvu8I = 0; lvu8I<SERVER_SOCKET_MAX_FRAME_SIZE; lvu8I++)
+				{
+					printf("libAccelSocket_bComServer : Byte%d = %02X\n",lvu8I,ats8Reply[lvu8I]);
+				}
 #endif
 			}
 		}
