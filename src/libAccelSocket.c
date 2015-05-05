@@ -54,7 +54,7 @@
 //****************************************************************************//
 // CONST
 //****************************************************************************//
-const char ps8libAccelVersion[] = LIBACCELSOCKET_VERSION;
+const char pcs8libAccelVersion[] = LIBACCELSOCKET_VERSION;
 
 
 //****************************************************************************//
@@ -136,7 +136,7 @@ elibAccelSocketBool libAccelSocket_bComServer(TstLibAccelSocketFrame ats8Request
 
 char* libAccelSocket_ps8GetVersion(void)
 {
-	return ps8libAccelVersion;
+	return (char*)pcs8libAccelVersion;
 }
 
 
