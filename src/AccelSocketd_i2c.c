@@ -386,7 +386,7 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 	
 	if (write(s_iAccelFd, &lvu8Register, 1) == 1)
 	{
-		if (read(s_iAccelFd, (char*)apstAccel, 6) != 1)
+		if (read(s_iAccelFd, (char*)apstAccel, 6) != 6)
 		{
 			syslog(LOG_INFO, "I2c_bGetXYZ : Error while reading");
 		}
