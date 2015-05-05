@@ -101,8 +101,8 @@ elibAccelSocketBool I2c_bOpen(void)
 					if (	(I2c_bWriteRegister(LIS3DH_CTRL_REG1,0x47))						// 50 Hz, Normal Mode, X/Y/Z enabled
 						&&	(I2c_bWriteRegister(LIS3DH_CTRL_REG2,0x00))						// No filtering
 						&&	(I2c_bWriteRegister(LIS3DH_CTRL_REG3,0x00))						// IT Disabled;
-						&&	(I2c_bWriteRegister(LIS3DH_CTRL_REG4,0x08))						// HR + Default value (Blockupdate disabled, +/- 2G, No selftest)
-						&&	(I2c_bWriteRegister(LIS3DH_INT1_CFG,0x00))						// No IT						
+						&&	(I2c_bWriteRegister(LIS3DH_CTRL_REG4,0x88))						// Blockupdate + HR + Default value (+/- 2G, No selftest)
+						&&	(I2c_bWriteRegister(LIS3DH_INT1_CFG,0x00))						// No IT
 						&&	(I2c_bReadRegister(LIS3DH_INT1_SRC,&lvu8RegValue))	)	// Clear IT
 					{
 						lvbResult = TRUE;
