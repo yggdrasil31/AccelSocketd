@@ -386,13 +386,13 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 	
 	if (write(s_iAccelFd, &lvu8Register, 1) == 1)
 	{
-		if (read(s_iAccelFd, apstAccel, 6) != 1)
+		if (read(s_iAccelFd, (char*)apstAccel, 6) != 1)
 		{
 			syslog(LOG_INFO, "I2c_bGetXYZ : Error while reading");
 		}
 		else
 		{			
-			syslog(LOG_INFO, "I2c_bGetXYZ : Read successful");
+			syslog(LOG_INFO, "I2c_bGetXYZ : Read successful %02X %02X %02X %02X %02X %02X", ((char*)apstAccel)[0], ((char*)apstAccel)[1], ((char*)apstAccel)[2], ((char*)apstAccel)[3], ((char*)apstAccel)[4], ((char*)apstAccel)[5] );
 			lvbRet = TRUE;
 		}
 	}

@@ -112,6 +112,7 @@ void vServer_processListen(void)
 	TstLibAccelSocketFrame		lts8Reply = {0};
 	struct sockaddr_un				lstClientAddress;
 	uint8_t										lvu8Data;
+	uint8_t										lvu8I;
 	TstAccel_XYZ							lstAccel = {0};
 		
 	lvs32BytesReceived = recvfrom(s32ServerSocket,
@@ -225,6 +226,8 @@ void vServer_processListen(void)
 				break;
 		}
 		
+		
+		
 		// Sending reply to the client
 		lvs32BytesSent = sendto(s32ServerSocket,
 														lts8Reply,
@@ -233,6 +236,10 @@ void vServer_processListen(void)
 														(struct sockaddr *) &(lstClientAddress), 
 														s32AddressLength);
 		syslog(LOG_INFO, "vServer_processListen : %u bytes sent",lvs32BytesSent);
+		for (lvu8I = 0; lvu8I<SERVER_SOCKET_MAX_FRAME_SIZE; lvu8I++)
+		{
+			syslog(LOG_INFO, "vServer_processListen : Byte%d = %02X",lvu8I,lts8Reply[lvu8I]);
+		}
 	}
 
 }	 
