@@ -39,7 +39,7 @@
 //****************************************************************************//
 // DEFINITION
 //****************************************************************************// 
-
+#define LIS3DH_MULTIPLEBYTE_MASK	0x80
 
 //****************************************************************************//
 // MACRO
@@ -355,12 +355,15 @@ elibAccelSocketBool I2c_bSetSelfTestMode(uint8_t avu8Mode)
 elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 {
 	elibAccelSocketBool	lvbRet = FALSE;
+	unsigned char 			avu8Register;
+	/*
 	uint8_t							lvu8Val = 0;
 	uint16_t						lvu16Val = 0;
-		
+	
 	if (I2c_bReadRegister(LIS3DH_STATUS_REG,&lvu8Val))
 	{
-		if (lvu8Val & LIS3DH_STATUSREG_XYZDA) /* new data available */
+		// new data available ?
+		if (lvu8Val & LIS3DH_STATUSREG_XYZDA) 
 		{
 			if (I2c_bReadPairedRegister(LIS3DH_OUT_X_L,&lvu16Val))
 			{
@@ -377,6 +380,23 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 			}
 		}
 	}
-	return lvbRet;	
+	*/
+	lvu8Register = LIS3DH_OUT_X_L;
+	lvu8Register |= LIS3DH_MULTIPLEBYTE_MASK;
+	
+	if (write(s_iAccelFd, &lvu8Register, 1) == 1)
+	{
+		if (read(s_iAccelFd, apstAccel, 6) != 1)
+		{
+			syslog(LOG_INFO, "I2c_bGetXYZ : Error while reading");
+		}
+		else
+		{			
+			syslog(LOG_INFO, "I2c_bGetXYZ : Read successful");
+			lvbResult = TRUE;
+		}
+	}
+	
+	return lvbRet;
 }
 
