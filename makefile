@@ -55,6 +55,7 @@ $(LIB_TARGET): $(LIB_OBJS)
 	
 	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
+	pwd
 	$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS) -lAccelSocket
 	
 	
