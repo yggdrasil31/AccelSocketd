@@ -360,6 +360,8 @@ elibAccelSocketBool I2c_bGetXYZ(TstAccel_XYZ* apstAccel)
 	uint8_t							lvu8Val = 0;
 	uint16_t						lvu16Val = 0;
 	
+	memset(apstAccel,0,sizeof(TstAccel_XYZ));
+	
 	if (I2c_bReadRegister(LIS3DH_STATUS_REG,&lvu8Val))
 	{
 		// new data available ?
