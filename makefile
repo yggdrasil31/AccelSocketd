@@ -50,7 +50,7 @@ $(DAEMON_TARGET): $(DAEMON_OBJS)
 	
 	
 $(LIB_TARGET): $(LIB_OBJS)
-	$(CC) -o $@ $(LIB_OBJS) $(LDLIBS)
+	$(CC) -c LIB_SRCS -o $(LIB_OBJS)
 	$(AR) rcs $(LIB_TARGET) $(LIB_OBJS)
 	
 	
