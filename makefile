@@ -50,18 +50,18 @@ clean:
 #	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(DAEMON_TARGET): $(DAEMON_OBJS)
-	echo $(CFLAGS)
-	$(CC) $(CFLAGS) -o $@ $(DAEMON_OBJS) $(LDLIBS)
+	echo $CFLAGS
+	$(CC) $CFLAGS -o $@ $(DAEMON_OBJS) $(LDLIBS)
 	
 	
 $(LIB_TARGET): $(LIB_OBJS)
-	$(CC) $(CFLAGS) -c $(LIB_SRCS) -o $(LIB_OBJS)
+	$(CC) $CFLAGS -c $(LIB_SRCS) -o $(LIB_OBJS)
 	$(AR) rcs $(LIB_TARGET) $(LIB_OBJS)
 	
 	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
 	#$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS) -L./ -lAccelSocket
-	$(CC) $(CFLAGS) -o $@ $(CLIENT_OBJS) $(LDLIBS) -lAccelSocket
+	$(CC) $CFLAGS -o $@ $(CLIENT_OBJS) $(LDLIBS) -lAccelSocket
 	
 	
 .PHONY: all clean
