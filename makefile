@@ -1,23 +1,23 @@
 #OBJS = $(SRCS:.c=.o)
 
 # Comment/uncomment the following line to disable/enable debugging
-DEBUG = n
+DEBUG=y
 
 # Targets definition
-DAEMON_TARGET = AccelSocketd
-DAEMON_SRCS =	./src/AccelSocketd_main.c \
-							./src/AccelSocketd_server.c \
-							./src/AccelSocketd_i2c.c
-DAEMON_OBJS = $(DAEMON_SRCS:.c=.o)
+DAEMON_TARGET=AccelSocketd
+DAEMON_SRCS=/src/AccelSocketd_main.c \
+						./src/AccelSocketd_server.c \
+						./src/AccelSocketd_i2c.c
+DAEMON_OBJS=$(DAEMON_SRCS:.c=.o)
 
 
-LIB_TARGET = libAccelSocket.a
-LIB_SRCS = ./src/libAccelSocket.c
-LIB_OBJS = $(LIB_SRCS:.c=.o)
+LIB_TARGET=libAccelSocket.a
+LIB_SRCS=./src/libAccelSocket.c
+LIB_OBJS=$(LIB_SRCS:.c=.o)
 
-CLIENT_TARGET = AccelSocketTestClient
-CLIENT_SRCS =	./src/AccelSocket_main.c
-CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
+CLIENT_TARGET=AccelSocketTestClient
+CLIENT_SRCS=./src/AccelSocket_main.c
+CLIENT_OBJS=$(CLIENT_SRCS:.c=.o)
 
 # FLAGS
 #CFLAGS = -Wall
@@ -25,15 +25,15 @@ CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 LDLIBS = 
 
 # Folders
-DIR_INC = -I./inc
-DIR_LIB = -L./
+DIR_INC=-I./inc
+DIR_LIB=-L./
 
 #LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
 #INC = -I${LINUXPATH}/include/
 #INC += -I${BUILDROOT_PATH}/output/host/usr/arm-unknown-linux-gnu/sysroot/usr/include/
 
 ifeq ($(DEBUG),y)
-  CFLAGS += -DDEBUG
+  CFLAGS+=-DDEBUG
 endif
 
 
