@@ -20,7 +20,7 @@ CLIENT_SRCS =	./src/AccelSocket_main.c
 CLIENT_OBJS = $(CLIENT_SRCS:.c=.o)
 
 # FLAGS
-CFLAGS = -Wall
+#CFLAGS = -Wall
 #LDLIBS = -lm -lpthread
 LDLIBS = 
 
@@ -50,6 +50,7 @@ clean:
 #	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(DAEMON_TARGET): $(DAEMON_OBJS)
+	echo $(CFLAGS)
 	$(CC) $(CFLAGS) -o $@ $(DAEMON_OBJS) $(LDLIBS)
 	
 	
