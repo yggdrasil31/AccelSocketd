@@ -1,0 +1,10 @@
+/AccelSocketd
+/src/AccelSocketd_server.o
+/AccelSocketClient
+/src/libAccelSocket.o
+/src/AccelSocket_main.o
+/AccelClient
+/src/AccelSocketd_main.o
+/src/AccelSocketd_i2c.o
+/libAccelSocket.a
+
