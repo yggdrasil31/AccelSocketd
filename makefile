@@ -24,12 +24,17 @@ CLIENT_OBJS=$(CLIENT_SRCS:.c=.o)
 
 
 # Include folder
-INC=-I./inc -I./src
+INC=./inc
 
+# Libs folder
+LDLIBS=
+
+# CFlags
+CFLAGS+=
 
 # Pattern rule to generate .o out of .c
 %.o: %.c
-	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
+	$(CC) -I$(INC) $(CFLAGS) -c -o $@ $<
 
 
 # Target definition
@@ -44,14 +49,14 @@ $(DAEMON_TARGET): $(DAEMON_OBJS)
 	$(CC) -o $@ $(DAEMON_OBJS)
 	
 $(LIB_TARGET): $(LIB_OBJS)
-	$(CC) $(INC) $(CFLAGS) -c $(LIB_SRCS) -o $(LIB_OBJS)
+	$(CC) -I$(INC) $(CFLAGS) -c $(LIB_SRCS) -o $(LIB_OBJS)
 	$(AR) rcs $(LIB_TARGET) $(LIB_OBJS)
 	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
-	$(CC) $(INC) $(CFLAGS) -o $@ $(CLIENT_OBJS) $(LDLIBS) -L./ -lAccelSocket $(DIR_INC)
+	$(CC) -I$(INC) $(CFLAGS) -o $@ $(CLIENT_OBJS) $(LDLIBS) -L./ -lAccelSocket
 
 install:
 	cp $(LIB_TARGET) $(DESTDIR)/usr/lib/
-	cp $(DIR_INC)/*.h $(DESTDIR)/usr/include/
-	
+	cp $(INC)/*.h $(DESTDIR)/usr/include/
+
 # DO NOT DELETE THIS LINE -- make depend needs it
