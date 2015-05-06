@@ -3,7 +3,7 @@
 /AccelSocketClient
 /src/libAccelSocket.o
 /src/AccelSocket_main.o
-/AccelClient
+/AccelSocketTestClient
 /src/AccelSocketd_main.o
 /src/AccelSocketd_i2c.o
 /libAccelSocket.a
