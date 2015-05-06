@@ -24,6 +24,10 @@ CFLAGS = -Wall
 #LDLIBS = -lm -lpthread
 LDLIBS = 
 
+# Folders
+DIR_INC = ./inc
+DIR_LIB = ./
+CFLAGS += -I$(DIR_INC) -L$(DIR_LIB)
 
 #LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
 #INC = -I${LINUXPATH}/include/
@@ -41,9 +45,9 @@ clean:
 	rm -f $(LIB_OBJS) $(LIB_TARGET)
 	rm -f $(CLIENT_OBJS) $(CLIENT_TARGET)
 
-%.o: %.c
+#%.o: %.c
 #	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
-	$(CC) $(CFLAGS) -c -o $@ $<
+#	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(DAEMON_TARGET): $(DAEMON_OBJS)
 	$(CC) -o $@ $(DAEMON_OBJS) $(LDLIBS)
@@ -55,14 +59,13 @@ $(LIB_TARGET): $(LIB_OBJS)
 	
 	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
-	pwd
 	$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS) -L./ -lAccelSocket
 	
 	
 .PHONY: all clean
 
 install:
-	cp $(DAEMON_TARGET) $(DESTDIR)/bin/
-	cp $(CLIENT_TARGET) $(DESTDIR)/bin/
-
+	cp $(LIB_TARGET) $(DESTDIR)/usr/lib/
+	cp $(DIR_INC)/*.h $(DESTDIR)/usr/include/
+	
 # DO NOT DELETE THIS LINE -- make depend needs it
