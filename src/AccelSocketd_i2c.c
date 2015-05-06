@@ -28,6 +28,7 @@
 #include <syslog.h>
 #include <sys/types.h>
 #include <fcntl.h>
+#include <string.h>
 
 //****************************************************************************//
 // INCUSER
