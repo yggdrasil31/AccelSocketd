@@ -198,7 +198,7 @@ void libAccelSocket_vClose(void)
 }
 
 
-elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRateConfiguration)
+elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu32DataRateConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};
@@ -207,7 +207,7 @@ elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRate
 	
 	// Prepare the request frame
 	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_SET_DATA_RATE;
-	lts8Request[SERVER_OFFSET_PARAM1] = avu8DataRateConfiguration;
+	lts8Request[SERVER_OFFSET_PARAM1] = (uint8_t) avu8DataRateConfiguration;
 	
 	// Send it to the server
 	if(libAccelSocket_bComServer(lts8Request, lts8Reply))
@@ -223,7 +223,7 @@ elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRate
 }
 
 
-elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRateConfiguration)
+elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu32DataRateConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};
@@ -237,7 +237,7 @@ elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRat
 	{
 		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
 		{
-			*apu8DataRateConfiguration = lts8Reply[SERVER_OFFSET_PARAM1];
+			*apu32DataRateConfiguration = (uint32_t) lts8Reply[SERVER_OFFSET_PARAM1];
 			lvbResult = TRUE;
 		}
 	}
@@ -245,7 +245,7 @@ elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRat
 	return lvbResult;
 }
 
-elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8ScaleRangeConfiguration)
+elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu32ScaleRangeConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};
@@ -253,7 +253,7 @@ elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8Scale
 	
 	// Prepare the request frame
 	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_SET_SCALE_RANGE;
-	lts8Request[SERVER_OFFSET_PARAM1] = avu8ScaleRangeConfiguration;
+	lts8Request[SERVER_OFFSET_PARAM1] = (uint8_t) avu32ScaleRangeConfiguration;
 	
 	// Send it to the server
 	if(libAccelSocket_bComServer(lts8Request, lts8Reply))
@@ -269,7 +269,7 @@ elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8Scale
 }	
 
 
-elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8ScaleRangeConfiguration)
+elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu32ScaleRangeConfiguration)
 {
 	elibAccelSocketBool			lvbResult = FALSE;
 	TstLibAccelSocketFrame	lts8Request = {0};
@@ -283,7 +283,7 @@ elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8Scal
 	{
 		if (lts8Reply[SERVER_OFFSET_CMD] == lts8Request[SERVER_OFFSET_CMD])
 		{
-			*apu8ScaleRangeConfiguration = lts8Reply[SERVER_OFFSET_PARAM1];
+			*apu32ScaleRangeConfiguration = (uint32_t) lts8Reply[SERVER_OFFSET_PARAM1];
 			lvbResult = TRUE;
 		}
 	}

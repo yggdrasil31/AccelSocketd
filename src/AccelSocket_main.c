@@ -120,7 +120,7 @@ int main(int argc, char **argv)
 					break;
 					
 				case SERVER_CMD_SET_SCALE_RANGE:
-					libAccelSocket_bSetScaleRange(1);
+					libAccelSocket_bSetScaleRange(0);
 					break;
 					
 				case SERVER_CMD_GET_SCALE_RANGE:
