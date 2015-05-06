@@ -12,11 +12,9 @@ DAEMON_SRCS=./src/AccelSocketd_main.c \
 						./src/AccelSocketd_server.c
 DAEMON_OBJS=$(DAEMON_SRCS:.c=.o)
 
-
 LIB_TARGET=libAccelSocket.a
 LIB_SRCS=./src/libAccelSocket.c
 LIB_OBJS=$(LIB_SRCS:.c=.o)
-
 
 CLIENT_TARGET=AccelSocketTestClient
 CLIENT_SRCS=./src/AccelSocket_main.c
@@ -31,6 +29,7 @@ LDLIBS=
 
 # CFlags
 CFLAGS+=
+
 
 # Pattern rule to generate .o out of .c
 %.o: %.c
