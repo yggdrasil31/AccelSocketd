@@ -1,0 +1,17 @@
+#!/bin/sh
+
+if [ ! -x /usr/bin/AccelSocketd ]
+then
+    exit 0
+fi
+
+if [ "$1" = "stop" -o "$1" = "restart" ]
+then                                                                            
+    [ "$VERBOSE" != no ] && echo "Stopping AccelSocketd: "
+    killall AccelSocketd
+fi
+if [ "$1" = "start" -o "$1" = "restart" ]
+then
+    [ "$VERBOSE" != no ] && echo "Starting AccelSocketd: "
+    /usr/bin/AccelSocketd
+fi
