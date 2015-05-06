@@ -51,6 +51,7 @@ clean:
 
 $(DAEMON_TARGET): $(DAEMON_OBJS)
 	echo $CFLAGS
+	echo i m here
 	$(CC) $CFLAGS -o $@ $(DAEMON_OBJS) $(LDLIBS)
 	
 	
