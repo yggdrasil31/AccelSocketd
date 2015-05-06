@@ -298,6 +298,8 @@ elibAccelSocketBool I2c_bSetScaleRange(uint8_t avu8Scale)
 	elibAccelSocketBool	lvbRet = FALSE;
 	unsigned char				lvu8RegValue;
 	
+	syslog(LOG_INFO, "I2c_bSetScaleRange : asked for %02X",avu8Scale);
+	
 	if(avu8Scale <= 3)
 	{		
 		if (I2c_bReadRegister(LIS3DH_CTRL_REG4,&lvu8RegValue))
@@ -323,6 +325,9 @@ elibAccelSocketBool I2c_bGetScaleRange(uint8_t* apu8Scale)
 	{
 		*apu8Scale = (*apu8Scale) & 0xCF;
 		*apu8Scale = *apu8Scale >> 4;
+		
+		syslog(LOG_INFO, "I2c_bGetScaleRange : scale is %02X",*apu8Scale);
+		
 		lvbRet = TRUE;
 	}
 	
