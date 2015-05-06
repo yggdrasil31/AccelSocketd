@@ -27,7 +27,6 @@ LDLIBS =
 # Folders
 DIR_INC = ./inc
 DIR_LIB = ./
-CFLAGS += -I$(DIR_INC) -L$(DIR_LIB)
 
 #LINUXPATH=$(BUILDROOT_PATH)/output/build/linux-custom
 #INC = -I${LINUXPATH}/include/
@@ -50,19 +49,16 @@ clean:
 #	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(DAEMON_TARGET): $(DAEMON_OBJS)
-	echo $CFLAGS
-	echo i m here
-	$(CC) $CFLAGS -o $@ $(DAEMON_OBJS) $(LDLIBS)
+	$(CC) -o $@ $(DAEMON_OBJS) $(LDLIBS) -I$(DIR_INC)
 	
 	
 $(LIB_TARGET): $(LIB_OBJS)
-	$(CC) $CFLAGS -c $(LIB_SRCS) -o $(LIB_OBJS)
+	$(CC) -c $(LIB_SRCS) -o $(LIB_OBJS) -I$(DIR_INC)
 	$(AR) rcs $(LIB_TARGET) $(LIB_OBJS)
 	
 	
 $(CLIENT_TARGET): $(CLIENT_OBJS)
-	#$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS) -L./ -lAccelSocket
-	$(CC) $CFLAGS -o $@ $(CLIENT_OBJS) $(LDLIBS) -lAccelSocket
+	$(CC) -o $@ $(CLIENT_OBJS) $(LDLIBS) -L./ -lAccelSocket -I$(DIR_INC)
 	
 	
 .PHONY: all clean
