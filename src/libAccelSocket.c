@@ -207,7 +207,7 @@ elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu32DataRat
 	
 	// Prepare the request frame
 	lts8Request[SERVER_OFFSET_CMD] = SERVER_CMD_SET_DATA_RATE;
-	lts8Request[SERVER_OFFSET_PARAM1] = (uint8_t) avu8DataRateConfiguration;
+	lts8Request[SERVER_OFFSET_PARAM1] = (uint8_t) avu32DataRateConfiguration;
 	
 	// Send it to the server
 	if(libAccelSocket_bComServer(lts8Request, lts8Reply))

@@ -115,10 +115,10 @@ void								libAccelSocket_vClose(void);
 
 char*								libAccelSocket_ps8GetVersion(void);
 
-elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu8DataRateConfiguration);
-elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu8DataRateConfiguration);
-elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu8ScaleRangeConfiguration);
-elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu8ScaleRangeConfiguration);
+elibAccelSocketBool libAccelSocket_bSetDataRate(elibAccelSocketRate avu32DataRateConfiguration);
+elibAccelSocketBool libAccelSocket_bGetDataRate(elibAccelSocketRate* apu32DataRateConfiguration);
+elibAccelSocketBool libAccelSocket_bSetScaleRange(elibAccelSocketScale avu32ScaleRangeConfiguration);
+elibAccelSocketBool libAccelSocket_bGetScaleRange(elibAccelSocketScale* apu32ScaleRangeConfiguration);
 elibAccelSocketBool libAccelSocket_bSetSelftestMode(elibAccelSocketSelfTestMode avu8Mode);
 elibAccelSocketBool libAccelSocket_bGetXYZ(TstAccel_XYZ* apstAccel);
 elibAccelSocketBool libAccelSocket_bReadRegister(uint8_t avu8Register, uint8_t* apu8Value);
