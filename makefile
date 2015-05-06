@@ -44,9 +44,9 @@ clean:
 	rm -f $(LIB_OBJS) $(LIB_TARGET)
 	rm -f $(CLIENT_OBJS) $(CLIENT_TARGET)
 
-%.o: %.c
+#%.o: %.c
 #	$(CC) $(INC) $(CFLAGS) -c -o $@ $<
-	$(CC) $(CFLAGS) -c -o $@ $<
+#	$(CC) $(CFLAGS) -c -o $@ $<
 
 $(DAEMON_TARGET): $(DAEMON_OBJS)
 	$(CC) -o $@ $(DAEMON_OBJS) $(LDLIBS) $(DIR_INC)
