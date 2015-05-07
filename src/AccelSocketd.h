@@ -34,7 +34,7 @@
 
 // AccelSocketd version number
 #define ACCELSOCKETD_STRING_NAME				"AccelSocketd"
-#define ACCELSOCKETD_STRING_VERSION			"V01.00.00"
+#define ACCELSOCKETD_STRING_VERSION			"V01.00.01"
 
 
 //****************************************************************************//
