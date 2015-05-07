@@ -97,7 +97,7 @@ elibAccelSocketBool I2c_bOpen(void)
 			if (I2c_bReadRegister(LIS3DH_WHO_AM_I,&lvu8RegValue))
 			{
 				syslog(LOG_INFO, "I2c_bOpen : I2C slave has sent its ID : %d", lvu8RegValue);
-				if (lvu8RegValue == 0x33)
+				if (lvu8RegValue == LIS3DH_WHO_AM_I_VAL)
 				{
 					if (	(I2c_bWriteRegister(LIS3DH_CTRL_REG1,0x47))						// 50 Hz, Normal Mode, X/Y/Z enabled
 						&&	(I2c_bWriteRegister(LIS3DH_CTRL_REG2,0x00))						// No filtering
@@ -261,7 +261,7 @@ elibAccelSocketBool I2c_bSetDataRate(uint8_t avu8DataRate)
 	elibAccelSocketBool	lvbRet = FALSE;
 	unsigned char				lvu8RegValue;
 	
-	if(avu8DataRate <= 9)
+	if(avu8DataRate <= (unsigned char) LIBACCELSOCKET_RATE_NORMAL1250HZ_LOW5000HZ)
 	{		
 		if (I2c_bReadRegister(LIS3DH_CTRL_REG1,&lvu8RegValue))
 		{
@@ -300,7 +300,7 @@ elibAccelSocketBool I2c_bSetScaleRange(uint8_t avu8Scale)
 	
 	syslog(LOG_INFO, "I2c_bSetScaleRange : asked for %02X",avu8Scale);
 	
-	if(avu8Scale <= 3)
+	if(avu8Scale <= (unsigned char) LIBACCELSOCKET_SCALE_PLUSORMINUS16G)
 	{		
 		if (I2c_bReadRegister(LIS3DH_CTRL_REG4,&lvu8RegValue))
 		{			
@@ -323,7 +323,7 @@ elibAccelSocketBool I2c_bGetScaleRange(uint8_t* apu8Scale)
 		
 	if (I2c_bReadRegister(LIS3DH_CTRL_REG4,apu8Scale))
 	{
-		*apu8Scale = (*apu8Scale) & 0xCF;
+		*apu8Scale = (*apu8Scale) & 0x30;
 		*apu8Scale = *apu8Scale >> 4;
 		
 		syslog(LOG_INFO, "I2c_bGetScaleRange : scale is %02X",*apu8Scale);
@@ -341,7 +341,7 @@ elibAccelSocketBool I2c_bSetSelfTestMode(uint8_t avu8Mode)
 	elibAccelSocketBool	lvbRet = FALSE;
 	unsigned char				lvu8RegValue;
 	
-	if(avu8Mode <= 1)
+	if(avu8Mode <= (unsigned char) LIBACCELSOCKET_SELFTESTMODE_1)
 	{		
 		if (I2c_bReadRegister(LIS3DH_CTRL_REG4,&lvu8RegValue))
 		{			
