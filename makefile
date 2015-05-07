@@ -1,5 +1,5 @@
 # Comment/uncomment the following line to disable/enable debugging
-DEBUG=y
+DEBUG=n
 ifeq ($(DEBUG),y)
 	EXTRA_CFLAGS =-DDEBUG
 else
